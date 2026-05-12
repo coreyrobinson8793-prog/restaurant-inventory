@@ -1,0 +1,6 @@
+# Copy this file to database.properties and fill in your actual credentials.
+# database.properties is gitignored to keep credentials out of version control.
+
+db.url=jdbc:mysql://localhost:3306/restaurant_inventory?useSSL=false&serverTimezone=UTC
+db.user=root
+db.password=YOUR_PASSWORD_HERE

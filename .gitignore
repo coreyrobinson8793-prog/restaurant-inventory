@@ -1,0 +1,27 @@
+# Database credentials - NEVER commit these
+src/main/resources/database.properties
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# Maven build output
+target/
+
+# Compiled class files
+*.class
+
+# IDE files
+*.iml
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Log files
+*.log

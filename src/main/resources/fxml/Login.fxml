@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.coreyrobinson.inventory.controller.LoginController"
+           prefWidth="400" prefHeight="300">
+    
+    <VBox alignment="CENTER" spacing="15" maxWidth="400">
+        
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        
+        <Label text="Tailgate Tavern" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Label text="Inventory Management Login" style="-fx-font-size: 14px;"/>
+        
+        <TextField fx:id="usernameField" promptText="Username"/>
+        <PasswordField fx:id="passwordField" promptText="Password"/>
+        
+        <Button fx:id="loginButton" text="Log In" onAction="#handleLogin" 
+                defaultButton="true" prefWidth="200"/>
+        
+        <Label fx:id="messageLabel" style="-fx-text-fill: red;" wrapText="true"/>
+        
+    </VBox>
+    
+</StackPane>
