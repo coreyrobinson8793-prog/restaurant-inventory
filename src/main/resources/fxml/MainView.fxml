@@ -4,26 +4,66 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.coreyrobinson.inventory.controller.MainController"
-           prefWidth="800" prefHeight="600">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.coreyrobinson.inventory.controller.MainController"
+            prefWidth="1000" prefHeight="700">
     
-    <VBox alignment="CENTER" spacing="20" maxWidth="600">
-        
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
-        
-        <Label text="Tailgate Tavern" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
-        <Label text="Inventory Management" style="-fx-font-size: 16px;"/>
-        
-        <Label fx:id="welcomeLabel" style="-fx-font-size: 14px;"/>
-        <Label fx:id="roleLabel" style="-fx-font-size: 12px; -fx-text-fill: gray;"/>
-        
-        <Label text="(Main dashboard coming soon...)" style="-fx-font-style: italic;"/>
-        
-        <Button fx:id="logoutButton" text="Log Out" onAction="#handleLogout" prefWidth="150"/>
-        
-    </VBox>
+    <!-- TOP: Header bar with app title and current user -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #2c3e50;">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            
+            <Label text="Tailgate Tavern" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Inventory Management" style="-fx-font-size: 14px; -fx-text-fill: #bdc3c7;"/>
+            
+            <!-- Spacer pushes user info to the right -->
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label fx:id="currentUserLabel" style="-fx-font-size: 12px; -fx-text-fill: white;"/>
+        </HBox>
+    </top>
     
-</StackPane>
+    <!-- LEFT: Sidebar navigation -->
+    <left>
+        <VBox spacing="5" style="-fx-background-color: #34495e;" prefWidth="180">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            
+            <Button fx:id="inventoryButton" text="Inventory" onAction="#handleNavInventory"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+            
+            <Button fx:id="suppliersButton" text="Suppliers" onAction="#handleNavSuppliers"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+            
+            <Button fx:id="ordersButton" text="Purchase Orders" onAction="#handleNavOrders"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+            
+            <Button fx:id="usersButton" text="Users" onAction="#handleNavUsers"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+            
+            <Button fx:id="reportsButton" text="Reports" onAction="#handleNavReports"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+            
+            <!-- Spacer pushes logout to bottom -->
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Button fx:id="logoutButton" text="Log Out" onAction="#handleLogout"
+                    maxWidth="Infinity" alignment="CENTER_LEFT"
+                    style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+        </VBox>
+    </left>
+    
+    <!-- CENTER: Content area, populated dynamically by controller -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #ecf0f1;"/>
+    </center>
+    
+</BorderPane>

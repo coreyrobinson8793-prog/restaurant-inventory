@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+	  alignment="TOP_CENTER" spacing="20" style="-fx-background-color: #90b7de">
+	  <padding>
+	  	<Insets top="40" right="20" left="20" bottom="15"/>
+	  </padding>
+	  <Label text="Purchase Orders" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+	  <Label text="Coming Soon" style="-fx-font-size: 14px; -fx-font-style: italic; -fx-text-fill: gray;"/>
+</VBox>

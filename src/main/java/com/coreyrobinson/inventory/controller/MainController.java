@@ -17,28 +17,69 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class MainController {
 	
-	@FXML private Label welcomeLabel;
-	@FXML private Label roleLabel;
+	@FXML private Label currentUserLabel;
+	@FXML private StackPane contentArea;
 	
 	@FXML 
 	private void initialize() {
 		User currentUser = Session.getCurrentUser();
 		if (currentUser != null) {
-			welcomeLabel.setText("Welcome " + currentUser.getUsername() + ".");
-			roleLabel.setText("Logged in as " + currentUser.getPosition() + ".");
+			currentUserLabel.setText("Logged in as " + currentUser.getUsername() + "(" + currentUser.getPosition() + ").");
+			loadView("/fxml/InventoryView.fxml");
 		}
 	}
+	
+	/**
+	 * Loads an FXML view into the content area.
+	 * @param fxmlPath	Classpath to the FXML file.
+	 */
+	private void loadView(String fxmlPath) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+			Parent view = loader.load();
+			contentArea.getChildren().setAll(view);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	
 	@FXML
-	private void handleLogout (ActionEvent event) throws IOException {
+	private void handleLogout(ActionEvent event) throws IOException {
 		Session.clear();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
 		Parent root = loader.load();
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.setScene(new Scene(root));
+	}
+	
+	@FXML
+	private void handleNavInventory() {
+		loadView("/fxml/InventoryView.fxml");
+	}
+	
+	@FXML 
+	private void handleNavSuppliers() {
+		loadView("/fxml/SuppliersView.fxml");
+	}
+	
+	@FXML
+	private void handleNavOrders() {
+		loadView("/fxml/PurchaseOrdersView.fxml");
+	}
+	
+	@FXML 
+	private void handleNavUsers() {
+		loadView("/fxml/UsersView.fxml");
+	}
+	
+	@FXML
+	private void handleNavReports() {
+		loadView("/fxml/ReportsView.fxml");
 	}
 
 }
