@@ -25,3 +25,6 @@ Desktop.ini
 
 # Log files
 *.log
+
+# Folder for sharing project zips with Claude
+Alpha_for_claude/
