@@ -8,6 +8,7 @@ package com.coreyrobinson.inventory.service;
 import com.coreyrobinson.inventory.dao.UserDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.mindrot.jbcrypt.BCrypt;
 import com.coreyrobinson.inventory.model.User;
@@ -100,6 +101,15 @@ public class UserService {
 			}
 		}
 		userDao.deactivate(deactivateById);
+	}
+	
+	/**
+	 * Finds all users in the application.
+	 * @return	All users.
+	 * @throws SQLException	If a database error occurs.
+	 */
+	public List<User> findAllUsers() throws SQLException {
+		return userDao.findAll();		
 	}
 	
 }

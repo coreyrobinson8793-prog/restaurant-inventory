@@ -1,6 +1,6 @@
 /*
  * AUTHOR: Corey Robinson
- * PURPOSE: 
+ * PURPOSE: Handles the logic on the main screen.
  * DATE: 05/10/2026
  */
 package com.coreyrobinson.inventory.controller;

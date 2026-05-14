@@ -5,10 +5,35 @@
 <?import javafx.geometry.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
-	  alignment="TOP_CENTER" spacing="20" style="-fx-background-color: #90b7de">
-	  <padding>
-	  	<Insets top="40" right="20" left="20" bottom="15"/>
-	  </padding>
-	  <Label text="Users" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-	  <Label text="Coming Soon" style="-fx-font-size: 14px; -fx-font-style: italic; -fx-text-fill: gray;"/>
+	fx:controller="com.coreyrobinson.inventory.controller.UsersController"
+	spacing="20" style="-fx-background-color: #f8f9fa">
+	<padding>
+		<Insets top="40" right="20" left="20" bottom="15" />
+	</padding>
+	<Label text="Users"
+		style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+	<Label text="Add New User"
+		style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+	<HBox spacing="10" alignment="CENTER_LEFT">
+		<TextField fx:id="usernameField" promptText="Username" />
+		<PasswordField fx:id="passwordField"
+			promptText="Password" />
+		<ChoiceBox fx:id="roleChoiceBox" />
+		<Button text="Add User" onAction="#handleAddUser" />
+	</HBox>
+	<Label fx:id="messageLabel" text="" style="-fx-font-size: 12px;" />
+	<TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
+		<columns>
+			<TableColumn text="Username" prefWidth="150"
+				fx:id="usernameColumn" />
+			<TableColumn text="Position" prefWidth="100"
+				fx:id="positionColumn" />
+			<TableColumn text="Active" prefWidth="80"
+				fx:id="activeColumn" />
+			<TableColumn text="Created" prefWidth="160"
+				fx:id="createdAtColumn" />
+			<TableColumn text="" prefWidth="120"
+				fx:id="actionsColumn" />
+		</columns>
+	</TableView>
 </VBox>
