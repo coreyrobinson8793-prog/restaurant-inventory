@@ -16,24 +16,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class MainController {
-	
+
 	@FXML private Label currentUserLabel;
 	@FXML private StackPane contentArea;
-	
+	@FXML private Button usersButton;
+
 	@FXML 
 	private void initialize() {
 		User currentUser = Session.getCurrentUser();
 		if (currentUser != null) {
-			currentUserLabel.setText("Logged in as " + currentUser.getUsername() + "(" + currentUser.getPosition() + ").");
+			currentUserLabel.setText("Logged in as " + currentUser.getUsername() + " (" + currentUser.getPosition() + ").");
+			if ("Staff".equals(currentUser.getPosition())) {
+				usersButton.setVisible(false);
+				usersButton.setManaged(false);
+			}
 			loadView("/fxml/InventoryView.fxml");
 		}
 	}
-	
+
 	/**
 	 * Loads an FXML view into the content area.
 	 * @param fxmlPath	Classpath to the FXML file.
@@ -47,7 +53,7 @@ public class MainController {
 			e.printStackTrace();
 		}		
 	}
-	
+
 	@FXML
 	private void handleLogout(ActionEvent event) throws IOException {
 		Session.clear();
@@ -56,27 +62,27 @@ public class MainController {
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		stage.setScene(new Scene(root));
 	}
-	
+
 	@FXML
 	private void handleNavInventory() {
 		loadView("/fxml/InventoryView.fxml");
 	}
-	
+
 	@FXML 
 	private void handleNavSuppliers() {
 		loadView("/fxml/SuppliersView.fxml");
 	}
-	
+
 	@FXML
 	private void handleNavOrders() {
 		loadView("/fxml/PurchaseOrdersView.fxml");
 	}
-	
+
 	@FXML 
 	private void handleNavUsers() {
 		loadView("/fxml/UsersView.fxml");
 	}
-	
+
 	@FXML
 	private void handleNavReports() {
 		loadView("/fxml/ReportsView.fxml");
