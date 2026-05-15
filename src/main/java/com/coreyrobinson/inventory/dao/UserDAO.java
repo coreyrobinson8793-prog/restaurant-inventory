@@ -1,6 +1,6 @@
 /*
  * AUTHOR: Corey Robinson
- * PURPOSE: Data access object for the User model. handles all database operations on the users table.
+ * PURPOSE: Data access object for the User model. Handles all database operations on the users table.
  * DATE: 05/06/2026
  */
 package com.coreyrobinson.inventory.dao;
@@ -112,7 +112,6 @@ public class UserDAO {
 			stmt.executeUpdate();
 		}
 	}
-
 
 	/**
 	 * Increments the counter for failed log-ins.
