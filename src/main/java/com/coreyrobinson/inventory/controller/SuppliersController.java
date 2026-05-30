@@ -8,6 +8,7 @@ package com.coreyrobinson.inventory.controller;
 
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -18,6 +19,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -25,6 +29,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class SuppliersController {
 
@@ -60,7 +66,24 @@ public class SuppliersController {
 			private final HBox buttons = new HBox(5, editButton, deactivateButton);
 			{
 				editButton.setOnAction(event -> {
-					// TODO: open edit dialog in P2
+					Supplier supplier = getTableView().getItems().get(getIndex());
+					try {
+						FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EditSupplierView.fxml"));
+						Parent root = loader.load();
+						EditSuppliersController controller = loader.getController();
+						controller.setSupplier(supplier);
+						Stage dialog = new Stage();
+						dialog.initModality(Modality.APPLICATION_MODAL);
+						dialog.setScene(new Scene(root));
+						dialog.setTitle("Edit Supplier");
+						dialog.showAndWait();
+						if (controller.isSaved()) {
+							refreshSuppliers();
+						}
+					} catch (IOException e) {
+						showError("Could not open edit dialog");
+						e.printStackTrace();
+					}
 				});
 				deactivateButton.setOnAction(event -> {
 					Supplier supplier = getTableView().getItems().get(getIndex());

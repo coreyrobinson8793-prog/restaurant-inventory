@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class EditItemController {
-	
+
 	@FXML private TextField nameField;
 	@FXML private ChoiceBox<Unit> unitChoiceBox;
 	@FXML private TextField currentStockField;
@@ -36,7 +36,7 @@ public class EditItemController {
 	private ItemService itemService = new ItemService();
 	private Item itemBeingEdited;	// item being edited
 	private boolean saved = false;
-	
+
 	@FXML
 	private void initialize() {
 		try {
@@ -87,7 +87,7 @@ public class EditItemController {
 			}
 		}
 	}
-	
+
 	@FXML
 	public void handleSave() {
 		String itemName = nameField.getText();
@@ -119,17 +119,17 @@ public class EditItemController {
 			showError("Database error: " + e.getMessage());
 		}
 	}
-	
+
 	@FXML
 	public void handleCancel() {
 		Stage stage = (Stage) nameField.getScene().getWindow();
 		stage.close();		
 	}
-	
+
 	public boolean isSaved() {
 		return saved;
 	}
-	
+
 	/**
 	 * Shows an error message.
 	 * @param message	The error message.
@@ -138,5 +138,4 @@ public class EditItemController {
 		messageLabel.setText(message);
 		messageLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: red;");
 	}
-	
 }
