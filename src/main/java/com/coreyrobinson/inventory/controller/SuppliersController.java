@@ -10,9 +10,14 @@ package com.coreyrobinson.inventory.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.coreyrobinson.inventory.model.Item;
+import com.coreyrobinson.inventory.model.ItemSupplier;
 import com.coreyrobinson.inventory.model.Supplier;
+import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.SupplierService;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -48,11 +53,31 @@ public class SuppliersController {
 	@FXML private TableColumn<Supplier, String> addressColumn;
 	@FXML private TableColumn<Supplier, Void> actionsColumn;
 	@FXML private TableColumn<Supplier, String> activeColumn;
+	@FXML private Label detailHeaderLabel;
+	@FXML private TableView<ItemSupplier> supplierItemsTable;
+	@FXML private TableColumn<ItemSupplier, String> detailItemNameColumn;
+	@FXML private TableColumn<ItemSupplier, String> detailSkuColumn;
+	@FXML private TableColumn<ItemSupplier, String> detailPriceColumn;
+	@FXML private TableColumn<ItemSupplier, String> detailPackSizeColumn;
+	@FXML private TableColumn<ItemSupplier, String> detailPreferredColumn;
+	@FXML private TableColumn<ItemSupplier, Void> detailActionsColumn;
 	private SupplierService supplierService = new SupplierService();
+	private ItemService itemService = new ItemService();
+	private ObservableList<ItemSupplier> supplierItemsList = FXCollections.observableArrayList();
 	private ObservableList<Supplier> suppliersList = FXCollections.observableArrayList();
+	private Map<Integer, String> itemNameMap;
 
 	@FXML
 	public void initialize() {
+		// Load item names for display
+		try {
+			itemNameMap = new HashMap<>();
+			for (Item item : itemService.findAllItems()) {
+				itemNameMap.put(item.getItemId(), item.getItemName());
+			}
+		} catch (SQLException e) {
+			showError("Error loading items: " + e.getMessage());
+		}
 		// Simple direct-field columns
 		supplierNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSupplierName()));
 		repNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getRepName()));
@@ -60,6 +85,11 @@ public class SuppliersController {
 		emailColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getEmail()));
 		addressColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getAddress()));
 		activeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isActive() ? "Active" : "Inactive"));
+		detailItemNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(itemNameMap.getOrDefault(cell.getValue().getItemId(), "?")));
+		detailSkuColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSupplierSku()));
+		detailPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPrice().toString()));
+		detailPackSizeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPackSize().toString()));
+		detailPreferredColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isPreferred() ? "Yes" : "No"));
 		actionsColumn.setCellFactory(column -> new TableCell<Supplier, Void>() {
 			private final Button editButton = new Button("Edit");
 			private final Button deactivateButton = new Button("Deactivate");
@@ -104,6 +134,27 @@ public class SuppliersController {
 		});
 		suppliersTable.setItems(suppliersList);
 		refreshSuppliers();
+		supplierItemsTable.setItems(supplierItemsList);
+		suppliersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+			if (newSelection != null) {
+				loadSupplierItems(newSelection);
+			}
+		});
+	}
+
+	/**
+	 * Loads the items supplied by the selected supplier and updates the detail view.
+	 * @param supplier	The selected supplier.
+	 */
+	private void loadSupplierItems(Supplier supplier) {
+		detailHeaderLabel.setText("Items supplied by " + supplier.getSupplierName());
+		try {
+			List<ItemSupplier> links = supplierService.findItemsForSupplier(supplier.getSupplierId());
+			links.removeIf(link -> !link.isActive());
+			supplierItemsList.setAll(links);
+		} catch (SQLException e) {
+			showError("Error loading supplier items: " + e.getMessage());
+		}
 	}
 
 	private void refreshSuppliers() {
@@ -115,7 +166,7 @@ public class SuppliersController {
 			showError("Error loading suppliers: " + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Shows a success message
 	 * @param message	The success message.
@@ -124,7 +175,7 @@ public class SuppliersController {
 		messageLabel.setStyle("-fx-text-fill: green; -fx-font-size: 12px;");
 		messageLabel.setText(message);		
 	}
-	
+
 	/**
 	 * Shows an error message.
 	 * @param message	The error message.
@@ -149,7 +200,7 @@ public class SuppliersController {
 			showError("Could not deactivate supplier: " + e.getMessage());
 		}
 	}
-	
+
 	@FXML
 	private void handleAddSupplier() {
 		String supplierName = supplierNameField.getText();
