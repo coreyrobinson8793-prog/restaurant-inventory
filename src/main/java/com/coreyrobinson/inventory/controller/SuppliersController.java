@@ -9,14 +9,17 @@ package com.coreyrobinson.inventory.controller;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.coreyrobinson.inventory.dao.UnitDAO;
 import com.coreyrobinson.inventory.model.Item;
 import com.coreyrobinson.inventory.model.ItemSupplier;
 import com.coreyrobinson.inventory.model.Supplier;
+import com.coreyrobinson.inventory.model.Unit;
 import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.SupplierService;
 
@@ -28,6 +31,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -36,6 +40,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class SuppliersController {
 
@@ -61,20 +66,51 @@ public class SuppliersController {
 	@FXML private TableColumn<ItemSupplier, String> detailPackSizeColumn;
 	@FXML private TableColumn<ItemSupplier, String> detailPreferredColumn;
 	@FXML private TableColumn<ItemSupplier, Void> detailActionsColumn;
+	@FXML private ChoiceBox<Item> linkItemChoiceBox;
+	@FXML private TextField linkSkuField;
+	@FXML private TextField linkPriceField;
+	@FXML private TextField linkPackSizeField;
+	@FXML private ChoiceBox<Unit> linkPackUnitChoiceBox;
 	private SupplierService supplierService = new SupplierService();
 	private ItemService itemService = new ItemService();
+	private UnitDAO unitDao = new UnitDAO();
 	private ObservableList<ItemSupplier> supplierItemsList = FXCollections.observableArrayList();
 	private ObservableList<Supplier> suppliersList = FXCollections.observableArrayList();
 	private Map<Integer, String> itemNameMap;
+	private Supplier selectedSupplier;
 
 	@FXML
 	public void initialize() {
 		// Load item names for display
 		try {
+			List<Item> items = itemService.findAllItems();
 			itemNameMap = new HashMap<>();
-			for (Item item : itemService.findAllItems()) {
+			for (Item item : items) {
 				itemNameMap.put(item.getItemId(), item.getItemName());
 			}
+			linkItemChoiceBox.setConverter(new StringConverter<Item>() {
+				@Override
+				public String toString(Item item) {
+					return item == null ? "" : item.getItemName();
+				}
+				@Override
+				public Item fromString(String s) {
+					return null;
+				}
+			});
+			linkItemChoiceBox.getItems().setAll(items);
+			List<Unit> packUnits = unitDao.findAll();
+			linkPackUnitChoiceBox.setConverter(new StringConverter<Unit>() {
+				@Override
+				public String toString(Unit unit) {
+					return unit == null ? "" : unit.getUnitName();
+				}
+				@Override
+				public Unit fromString(String s) {
+					return null;
+				}
+			});
+			linkPackUnitChoiceBox.getItems().setAll(packUnits);
 		} catch (SQLException e) {
 			showError("Error loading items: " + e.getMessage());
 		}
@@ -90,6 +126,26 @@ public class SuppliersController {
 		detailPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPrice().toString()));
 		detailPackSizeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPackSize().toString()));
 		detailPreferredColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isPreferred() ? "Yes" : "No"));
+		detailActionsColumn.setCellFactory(column -> new TableCell<ItemSupplier, Void>() {
+			private final Button preferredButton = new Button("Preferred");
+			private final Button unlinkButton = new Button("Unlink");
+			private final HBox buttons = new HBox(5, preferredButton, unlinkButton);
+			{
+				preferredButton.setOnAction(event -> {
+					ItemSupplier link = getTableView().getItems().get(getIndex());
+					handleSetPreferred(link);
+				});
+				unlinkButton.setOnAction(event -> {
+					ItemSupplier link = getTableView().getItems().get(getIndex());
+					handleUnlink(link);
+				});
+			}
+			@Override
+			protected void updateItem(Void item, boolean empty) {
+				super.updateItem(item, empty);
+				setGraphic(empty ? null : buttons);
+			}
+		});
 		actionsColumn.setCellFactory(column -> new TableCell<Supplier, Void>() {
 			private final Button editButton = new Button("Edit");
 			private final Button deactivateButton = new Button("Deactivate");
@@ -130,13 +186,13 @@ public class SuppliersController {
 					setGraphic(buttons);
 				}
 			}
-
 		});
 		suppliersTable.setItems(suppliersList);
 		refreshSuppliers();
 		supplierItemsTable.setItems(supplierItemsList);
 		suppliersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 			if (newSelection != null) {
+				selectedSupplier = newSelection;
 				loadSupplierItems(newSelection);
 			}
 		});
@@ -213,6 +269,71 @@ public class SuppliersController {
 			showSuccess("Supplier '" + supplierName + "' added.");
 			clearForm();
 			refreshSuppliers();
+		} catch (IllegalArgumentException e) {
+			showError(e.getMessage());
+		} catch (SQLException e) {
+			showError("Database error: " + e.getMessage());
+		}
+	}
+	
+	@FXML 
+	private void handleLinkItem() {
+		if (selectedSupplier == null) {
+			showError("Please select a supplier first");
+			return;
+		}
+		Item item = linkItemChoiceBox.getValue();
+		String sku = linkSkuField.getText();
+		Unit packUnit = linkPackUnitChoiceBox.getValue();
+		if (item == null || packUnit == null) {
+			showError("Please select an item and pack unit");
+			return;
+		}
+		try {
+			BigDecimal price = new BigDecimal(linkPriceField.getText());
+			BigDecimal packSize = new BigDecimal(linkPackSizeField.getText());
+			supplierService.linkItemToSupplier(item.getItemId(), selectedSupplier.getSupplierId(), sku, price, packSize, packUnit.getUnitId());
+			showSuccess("Item linked to supplier");
+			loadSupplierItems(selectedSupplier);
+			linkItemChoiceBox.setValue(null);
+			linkSkuField.clear();
+			linkPriceField.clear();
+			linkPackSizeField.clear();
+			linkPackUnitChoiceBox.setValue(null);
+		} catch (NumberFormatException e) {
+			showError("Price and pack size must be numbers");
+		} catch (IllegalArgumentException e) {
+			showError(e.getMessage());
+		} catch (SQLException e) {
+			showError("Database error: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Handles marking a supplier-item link as preferred.
+	 * @param link	The supplier-item link to mark preferred.
+	 */
+	private void handleSetPreferred(ItemSupplier link) {
+		try {
+			supplierService.setPreferredSupplier(link.getItemId(), link.getItemSupplierId());
+			showSuccess("Supplier marked preferred");
+			loadSupplierItems(selectedSupplier);
+		} catch (IllegalArgumentException e) {
+			showError(e.getMessage());
+		} catch (SQLException e) {
+			showError("Database error: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Handles unlinking an item from a supplier.
+	 * @param link	The supplier-item link to deactivate.
+	 */
+	private void handleUnlink(ItemSupplier link) {
+		try {
+			supplierService.deactivateItemSupplier(link.getItemSupplierId());
+			showSuccess("Item unlinked from supplier");
+			loadSupplierItems(selectedSupplier);
 		} catch (IllegalArgumentException e) {
 			showError(e.getMessage());
 		} catch (SQLException e) {
