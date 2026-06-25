@@ -176,7 +176,7 @@ public class SupplierService {
 		}
 		return itemSupplierDao.save(itemSupplier);
 	}
-	
+
 	/**
 	 * Sets a preferred supplier for an item.
 	 * @param itemId	The item.
@@ -201,6 +201,22 @@ public class SupplierService {
 			}
 		}
 	}
+
+	/**
+	 * Clears the preferred supplier for an item.
+	 * @param itemSupplierId	The item-supplier.
+	 * @throws SQLException	Error from the database.
+	 */
+	public void clearPreferred(int itemSupplierId) throws SQLException {
+		Optional<ItemSupplier> itemSupplier = itemSupplierDao.findById(itemSupplierId);
+		if (itemSupplier.isEmpty()) {
+			throw new IllegalArgumentException("Item-supplier link doesn't exist");
+		}
+		ItemSupplier linked = itemSupplier.get();
+		linked.setPreferred(false);
+		itemSupplierDao.save(linked);
+	}
+
 
 	/**
 	 * Validates the linkItemToSupplier fields.

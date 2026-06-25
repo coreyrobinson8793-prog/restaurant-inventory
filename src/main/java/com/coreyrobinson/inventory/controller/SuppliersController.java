@@ -133,7 +133,11 @@ public class SuppliersController {
 			{
 				preferredButton.setOnAction(event -> {
 					ItemSupplier link = getTableView().getItems().get(getIndex());
-					handleSetPreferred(link);
+					if (link.isPreferred()) {
+						handleClearPreferred(link);
+					} else {
+						handleSetPreferred(link);
+					}
 				});
 				unlinkButton.setOnAction(event -> {
 					ItemSupplier link = getTableView().getItems().get(getIndex());
@@ -143,7 +147,13 @@ public class SuppliersController {
 			@Override
 			protected void updateItem(Void item, boolean empty) {
 				super.updateItem(item, empty);
-				setGraphic(empty ? null : buttons);
+				if (empty) {
+					setGraphic(null);
+				} else {
+					ItemSupplier link = getTableView().getItems().get(getIndex());
+					preferredButton.setText(link.isPreferred() ? "Unprefer" : "Set Preferred");
+					setGraphic(buttons);
+				}
 			}
 		});
 		actionsColumn.setCellFactory(column -> new TableCell<Supplier, Void>() {
@@ -317,6 +327,22 @@ public class SuppliersController {
 		try {
 			supplierService.setPreferredSupplier(link.getItemId(), link.getItemSupplierId());
 			showSuccess("Supplier marked preferred");
+			loadSupplierItems(selectedSupplier);
+		} catch (IllegalArgumentException e) {
+			showError(e.getMessage());
+		} catch (SQLException e) {
+			showError("Database error: " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Handles clearing the preferred status of a supplier-item link.
+	 * @param link	The supplier-item link to clear preferred status.
+	 */
+	private void handleClearPreferred(ItemSupplier link) {
+		try {
+			supplierService.clearPreferred(link.getItemSupplierId());
+			showSuccess("Supplier cleared as preferred");
 			loadSupplierItems(selectedSupplier);
 		} catch (IllegalArgumentException e) {
 			showError(e.getMessage());
