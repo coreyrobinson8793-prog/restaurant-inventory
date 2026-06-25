@@ -64,10 +64,12 @@ A JavaFX desktop application for managing restaurant inventory, suppliers, purch
 ### Setup
 
 1. Clone the repository
-2. Create a MySQL database named `restaurant_inventory`
-3. Run the schema scripts (see `BUSINESS_RULES.md` for schema details)
-4. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials
-5. Run `mvn javafx:run` to start the application
+2. Run the SQL scripts in the `database/` folder in order:
+   - `schema.sql` — creates the database and all tables
+   - `migration_001_add_lockout_fields.sql` — adds login lockout fields
+   - `migration_002_supplier_junction_categories.sql` — adds categories and the supplier junction tables
+3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials
+4. Run `mvn javafx:run` to start the application
 
 ### First Run
 
