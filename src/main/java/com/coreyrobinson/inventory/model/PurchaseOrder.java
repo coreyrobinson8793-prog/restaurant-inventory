@@ -28,7 +28,7 @@ public class PurchaseOrder {
 	 * @param supplierId	I.D. of the supplier.
 	 * @param createdBy		Who created the purchase order.
 	 * @param createdDate	When the purchase order was created.
-	 * @param currentStatus	Status of the purchase order (draft, finalized, sent).
+	 * @param currentStatus	Status of the purchase order (OPEN, RECEIVED, CANCELLED).
 	 * @param total			Total cost of the purchase order.
 	 * @param notes			Any notes about the purchase order.
 	 */
@@ -52,7 +52,7 @@ public class PurchaseOrder {
 		this.supplierId = supplierId;
 		this.createdBy = createdBy;
 		this.notes = notes;
-		this.currentStatus = "Draft";
+		this.currentStatus = "OPEN";
 		this.total = BigDecimal.ZERO;
 	}
 
