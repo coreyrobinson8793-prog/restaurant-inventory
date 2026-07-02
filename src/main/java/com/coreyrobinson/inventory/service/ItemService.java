@@ -16,6 +16,7 @@ import com.coreyrobinson.inventory.model.Item;
 public class ItemService {
 	
 	private final ItemDAO itemDao = new ItemDAO();
+	private final PurchaseOrderService poService = new PurchaseOrderService();
 	
 	/**
 	 * Adds an item to the inventory manager.
@@ -117,13 +118,11 @@ public class ItemService {
 	
 	/**
 	 * Checks if an item is on any open purchase orders.
-	 * TODO: Implement when PurchaseOrderDAO is built.
 	 * @param itemId	The item's I.D.
 	 * @return	True if item is on an open PO, false otherwise.
 	 */
-	private boolean isItemOnOpenPurchaseOrder(int itemId) {
-		// TODO Query open purchase orders for this itemId
-		return false;
+	private boolean isItemOnOpenPurchaseOrder(int itemId) throws SQLException{
+		return poService.isItemOnOpenPurchaseOrder(itemId);
 	}
 
 }
