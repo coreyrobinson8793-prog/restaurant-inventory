@@ -1,14 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-	  alignment="TOP_CENTER" spacing="20" style="-fx-background-color: #90b7de">
-	  <padding>
-	  	<Insets top="40" right="20" left="20" bottom="15"/>
-	  </padding>
-	  <Label text="Purchase Orders" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-	  <Label text="Coming Soon" style="-fx-font-size: 14px; -fx-font-style: italic; -fx-text-fill: gray;"/>
-</VBox>
+<SplitPane dividerPositions="0.55"
+	xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: #f8f9fa"
+	fx:controller="com.coreyrobinson.inventory.controller.PurchaseOrdersController">
+	<VBox>
+		<padding>
+			<Insets top="40" right="20" left="20" bottom="15" />
+		</padding>
+		<Label text="Purchase Orders"
+			style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+		<Label text="Add New Purchase Order"
+			style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+		<GridPane hgap="10" vgap="5">
+			<padding>
+				<Insets top="10" right="10" bottom="10" left="10" />
+			</padding>
+			<Label text="Supplier" GridPane.rowIndex="0"
+				GridPane.columnIndex="0" />
+			<ChoiceBox fx:id="supplierChoiceBox" prefWidth="120"
+				GridPane.rowIndex="0" GridPane.columnIndex="1" />
+			<Label text="Notes" GridPane.rowIndex="1"
+				GridPane.columnIndex="0" />
+			<TextField fx:id="notesField" prefWidth="400"
+			    GridPane.rowIndex="1" GridPane.columnIndex="1" />
+		</GridPane>
+		<Button onAction="#handleCreatePO" text="Create Purchase Order" />
+		<Label fx:id="messageLabel" style="-fx-font-size: 12px;" />
+		<TableView fx:id="purchaseOrdersTable" VBox.vgrow="ALWAYS">
+	    	<columns>
+	    		<TableColumn text="Purchase Order ID" prefWidth="100"
+	    			fx:id="poIdColumn" />
+	    		<TableColumn text="Supplier" prefWidth="150"
+	    			fx:id="poSupplierColumn" />
+	    		<TableColumn text="User" prefWidth="150"
+	    			fx:id="poCreatedByColumn" />
+	    		<TableColumn text="Status" prefWidth="100"
+	    			fx:id="poStatusColumn" />
+	    		<TableColumn text="Total Cost" prefWidth="100"
+	    			fx:id="poTotalCostColumn" />
+	    		<TableColumn text="Created Date" prefWidth="100"
+	    			fx:id="poCreatedDateColumn" />
+	    	</columns>
+	    </TableView>
+	</VBox>
+	<VBox>
+		<padding>
+			<Insets top="40" right="20" left="20" bottom="15" />
+		</padding>
+		<Label fx:id="poDetailHeaderLabel" text="Select a Purchase Order"
+			style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+		<HBox spacing="10" alignment="CENTER_RIGHT">
+			<Button onAction="#handleReceivePO" text="Receive Order" fx:id="receiveButton" disable="true" />
+			<Button onAction="#handleCancelPO" text="Cancel Order" fx:id="cancelButton" disable="true" />
+		</HBox>
+		<TableView fx:id="lineItemsTable" VBox.vgrow="ALWAYS">
+			<columns>
+				<TableColumn text="Item" prefWidth="150"
+					fx:id="lineItemNameColumn" />
+				<TableColumn text="Quantity" prefWidth="100"
+					fx:id="lineQuantityColumn" />
+				<TableColumn text="Price" prefWidth="100"
+					fx:id="linePriceColumn" />
+				<TableColumn text="Sub Total" prefWidth="100"
+					fx:id="lineSubTotalColumn" />
+				<TableColumn text="Actions" prefWidth="100"
+					fx:id="lineActionsColumn" />
+			</columns>
+		</TableView>
+		<GridPane hgap="10" vgap="5">
+			<padding>
+				<Insets top="10" right="10" bottom="10" left="10" />
+			</padding>
+			<Label text="Add Line Item" GridPane.rowIndex="0" GridPane.columnIndex="0"
+				style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+			<Label text="Item" prefWidth="100" GridPane.rowIndex="1"
+				GridPane.columnIndex="0" />
+			<Label text="Quantity" prefWidth="100" GridPane.rowIndex="2"
+				GridPane.columnIndex="0" />
+			<ChoiceBox fx:id="itemChoiceBox" prefWidth="150" GridPane.rowIndex="1"
+				GridPane.columnIndex="1" />
+			<TextField fx:id="quantityField" prefWidth="100" GridPane.rowIndex="2"
+				GridPane.columnIndex="1" />
+			<Button onAction="#handleAddLineItem" text="Add Line Item"
+				GridPane.rowIndex="3" GridPane.columnIndex="1" />
+		</GridPane>
+	</VBox>
+</SplitPane>

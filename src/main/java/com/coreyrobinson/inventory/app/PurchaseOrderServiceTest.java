@@ -7,12 +7,14 @@ import java.util.Optional;
 import com.coreyrobinson.inventory.dao.PurchaseOrderDAO;
 import com.coreyrobinson.inventory.model.PurchaseOrder;
 import com.coreyrobinson.inventory.model.PurchaseOrderItem;
+import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.PurchaseOrderService;
 
 public class PurchaseOrderServiceTest {
 
 	public static void main(String[] args) {
 	    PurchaseOrderService poService = new PurchaseOrderService();
+	    ItemService itemService = new ItemService();	    
 	    int testSupplierId = 1;
 	    int testCreatedBy = 1;
 	    int testItemId = 1;
@@ -67,6 +69,19 @@ public class PurchaseOrderServiceTest {
 
 	    } catch (IllegalArgumentException e) {
 	        System.out.println("FAIL: unexpected rejection - " + e.getMessage());
+	    } catch (SQLException e) {
+	        System.out.println("FAIL: SQL error - " + e.getMessage());
+	    }
+	 // Cross-service rule: can't deactivate an item that's on an open PO
+	    try {
+	        PurchaseOrder openPo = poService.createPurchaseOrder(testSupplierId, testCreatedBy, "deactivation test");
+	        poService.addLineItem(openPo.getPoId(), testItemId, new BigDecimal("1"));
+	        // openPo is OPEN and now has item 1 on it
+
+	        itemService.deactivateItem(testItemId);
+	        System.out.println("FAIL: deactivating an item on an open PO should be rejected");
+	    } catch (IllegalArgumentException e) {
+	        System.out.println("PASS (expected): " + e.getMessage());
 	    } catch (SQLException e) {
 	        System.out.println("FAIL: SQL error - " + e.getMessage());
 	    }
