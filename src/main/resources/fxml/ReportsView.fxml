@@ -4,11 +4,61 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-	  alignment="TOP_CENTER" spacing="20" style="-fx-background-color: #90b7de">
+<VBox xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: #f8f9fa" 
+	  fx:controller="com.coreyrobinson.inventory.controller.ReportsController">
 	  <padding>
 	  	<Insets top="40" right="20" left="20" bottom="15"/>
 	  </padding>
-	  <Label text="Reports" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;"/>
-	  <Label text="Coming Soon" style="-fx-font-size: 14px; -fx-font-style: italic; -fx-text-fill: gray;"/>
+	  <Label text="Reports" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+	  <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+	  	<Tab text="Low Stock">
+	  		<VBox>
+	  			<TableView fx:id="lowStockTable" VBox.vgrow="ALWAYS">
+	  				<columns>
+	  					<TableColumn text="Item" prefWidth="150" fx:id="lsItemColumn" />
+	  					<TableColumn text="Current Stock" prefWidth="150" fx:id="lsCurrentStockColumn" />
+	  					<TableColumn text="Par Stock" prefWidth="150" fx:id="lsParColumn" />
+	  					<TableColumn text="Shortage" prefWidth="150" fx:id="lsShortageColumn" />	<!-- How short you are from obtaining par stock (parStock - currentStock) -->
+	  				</columns>
+	  			</TableView>
+	  		</VBox>
+	  	</Tab>
+	  	<Tab text="Open Purchase Orders">
+	  		<VBox>
+	  			<TableView fx:id="openPoTable" VBox.vgrow="ALWAYS">
+	  				<columns>
+	  					<TableColumn text="Open Purchase Order I.D." prefWidth="150" fx:id="opPoIdColumn" />
+	  					<TableColumn text="Supplier" prefWidth="150" fx:id="opSupplierColumn" />
+	  					<TableColumn text="Created Date" prefWidth="150" fx:id="opDateColumn" />
+	  					<TableColumn text="Created By" prefWidth="150" fx:id="opUserColumn" />	<!-- Who created the purchase order -->
+	  					<TableColumn text="Total" prefWidth="100" fx:id="opTotalColumn" />
+	  				</columns>
+	  			</TableView>
+	  		</VBox>
+	  	</Tab>
+	  	<Tab text="Spend by Suppliers">
+	  		<VBox>
+	  			<TableView fx:id="spendBySupplierTable" VBox.vgrow="ALWAYS">
+	  				<columns>
+	  					<TableColumn text="Supplier" prefWidth="150" fx:id="spSupplierColumn" />
+	  					<TableColumn text="Purchase Order Count" prefWidth="100" fx:id="spPoCountColumn" />
+	  					<TableColumn text="Total" prefWidth="100" fx:id="spTotalColumn" />
+	  				</columns>
+	  			</TableView>
+	  		</VBox>
+	  	</Tab>
+	  	<Tab text="Price Comparison">
+	  		<VBox>
+	  			<TableView fx:id="priceCompareTable" VBox.vgrow="ALWAYS">
+	  				<columns>
+	  					<TableColumn text="Item" prefWidth="150" fx:id="pcItemColumn" />
+	  					<TableColumn text="Supplier" prefWidth="150" fx:id="pcSupplierColumn" />
+	  					<TableColumn text="Price" prefWidth="100" fx:id="pcPriceColumn" />
+	  					<TableColumn text="Pack Size" prefWidth="100" fx:id="pcPackSizeColumn" />
+	  					<TableColumn text="Preferred" prefWidth="100" fx:id="pcPreferredColumn" />
+	  				</columns>
+	  			</TableView>
+	  		</VBox>
+	  	</Tab>
+	  </TabPane>
 </VBox>

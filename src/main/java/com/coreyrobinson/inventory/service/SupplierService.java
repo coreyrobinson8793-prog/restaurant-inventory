@@ -70,6 +70,15 @@ public class SupplierService {
 	public List<Supplier> findAllSuppliers() throws SQLException {
 		return supplierDao.findAll();
 	}
+	
+	/**
+	 * Finds all items linked to suppliers.
+	 * @return	The linked items.
+	 * @throws SQLException	Error from the database.
+	 */
+	public List<ItemSupplier> findAllItemSuppliers() throws SQLException {
+		return itemSupplierDao.findAll();
+	}
 
 	/**
 	 * Finds a supplier by its I.D.

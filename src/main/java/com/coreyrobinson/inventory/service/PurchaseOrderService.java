@@ -191,6 +191,16 @@ public class PurchaseOrderService {
 	}
 	
 	/**
+	 * Find purchase orders matching that requested status.
+	 * @param status	Status of the PO.
+	 * @return	The purchase order.
+	 * @throws SQLException	Error from the database.
+	 */
+	public List<PurchaseOrder> findPurchaseOrdersByStatus(String status) throws SQLException {
+		return poDao.findByStatus(status);
+	}
+	
+	/**
 	 * Recalculates the total when adding a new item to a purchase order.
 	 * @param poId	The I.D. of the purchase order to recalculate the total to.
 	 * @throws SQLException	Error from the database.
