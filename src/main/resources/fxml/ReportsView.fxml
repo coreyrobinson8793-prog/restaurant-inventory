@@ -10,6 +10,7 @@
 	  	<Insets top="40" right="20" left="20" bottom="15"/>
 	  </padding>
 	  <Label text="Reports" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+	  <Label fx:id="messageLabel" style="-fx-font-size: 12px;" />
 	  <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
 	  	<Tab text="Low Stock">
 	  		<VBox>
