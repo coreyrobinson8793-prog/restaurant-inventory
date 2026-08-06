@@ -22,6 +22,7 @@ import com.coreyrobinson.inventory.model.Supplier;
 import com.coreyrobinson.inventory.model.Unit;
 import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.SupplierService;
+import com.coreyrobinson.inventory.util.ConfirmDialog;
 import com.coreyrobinson.inventory.util.MoneyFormatter;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -257,6 +258,9 @@ public class SuppliersController {
 	 * @param supplier	The supplier to deactivate.
 	 */
 	private void handleDeactivate(Supplier supplier) {
+		if (!ConfirmDialog.confirm("Deactivate Supplier", "Deactivate supplier '" + supplier.getSupplierName() + "'?")) {
+			return;
+		}
 		try {
 			supplierService.deactivateSupplier(supplier.getSupplierId());
 			showSuccess("Supplier '" + supplier.getSupplierName() + "' deactivated.");
@@ -357,6 +361,9 @@ public class SuppliersController {
 	 * @param link	The supplier-item link to deactivate.
 	 */
 	private void handleUnlink(ItemSupplier link) {
+		if (!ConfirmDialog.confirm("Unlink Item", "Unlink '" + itemNameMap.getOrDefault(link.getItemId(), "this item")  + "' from " + selectedSupplier.getSupplierName() + "?")) {
+			return;
+		}
 		try {
 			supplierService.deactivateItemSupplier(link.getItemSupplierId());
 			showSuccess("Item unlinked from supplier");

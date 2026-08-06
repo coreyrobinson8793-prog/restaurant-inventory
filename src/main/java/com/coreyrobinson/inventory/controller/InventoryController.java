@@ -18,6 +18,7 @@ import com.coreyrobinson.inventory.model.Category;
 import com.coreyrobinson.inventory.model.Item;
 import com.coreyrobinson.inventory.model.Unit;
 import com.coreyrobinson.inventory.service.ItemService;
+import com.coreyrobinson.inventory.util.ConfirmDialog;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -151,6 +152,9 @@ public class InventoryController {
 	}
 	
 	private void handleDeactivate(Item item) {
+		if (!ConfirmDialog.confirm("Deactivate Item", "Deactivate item '" + item.getItemName() + "'?")) {
+			return;
+		}
 	    try {
 	        itemService.deactivateItem(item.getItemId());
 	        showSuccess("Item '" + item.getItemName() + "' deactivated.");

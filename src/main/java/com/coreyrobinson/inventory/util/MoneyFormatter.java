@@ -22,9 +22,6 @@ public final class MoneyFormatter {
 		return "$" + amount.setScale(2, RoundingMode.HALF_UP).toString();
 	}
 	
-	/**
-	 * Prevents instantiation of static utility class.
-	 */
 	private MoneyFormatter() {
 		
 	}

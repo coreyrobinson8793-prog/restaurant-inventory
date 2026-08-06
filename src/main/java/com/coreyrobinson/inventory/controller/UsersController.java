@@ -13,6 +13,7 @@ import java.util.List;
 import com.coreyrobinson.inventory.model.User;
 import com.coreyrobinson.inventory.service.UserService;
 import com.coreyrobinson.inventory.session.Session;
+import com.coreyrobinson.inventory.util.ConfirmDialog;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -127,6 +128,9 @@ public class UsersController {
 
 	private void handleDeactivate(User user) {
 		int loggedInUserId = Session.getCurrentUser().getUserId();
+		if (!ConfirmDialog.confirm("Deactivate User", "Deactivate '" + user.getUsername() + "'?")) {
+			return;
+		}
 		try {
 			userService.deactivateUser(user.getUserId(), loggedInUserId);
 			showSuccess("User '" + user.getUsername() + "' deactivated.");

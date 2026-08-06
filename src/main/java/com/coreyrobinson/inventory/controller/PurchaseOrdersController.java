@@ -24,6 +24,7 @@ import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.PurchaseOrderService;
 import com.coreyrobinson.inventory.service.SupplierService;
 import com.coreyrobinson.inventory.session.Session;
+import com.coreyrobinson.inventory.util.ConfirmDialog;
 import com.coreyrobinson.inventory.util.MoneyFormatter;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -215,6 +216,9 @@ public class PurchaseOrdersController {
 	 * @param lineItem The line item to be removed from the purchase order.
 	 */
 	private void handleRemoveLineItem(PurchaseOrderItem lineItem) {
+		if (!ConfirmDialog.confirm("Remove Line Item", "Remove this line item?")) {
+			return;
+		}
 		try {
 			poService.removeLineItem(lineItem.getPoItemId());
 			loadLineItems(selectedPO);
@@ -272,6 +276,9 @@ public class PurchaseOrdersController {
 			showError("Purchase order not found");
 			return;
 		}
+		if (!ConfirmDialog.confirm("Receive Purchase Order", "Receive PO #" + selectedPO.getPoId() + "?")) {
+			return;
+		}
 		try {
 			poService.receivePurchaseOrder(selectedPO.getPoId());
 			Optional<PurchaseOrder> freshPO = poService.findPurchaseOrderById(selectedPO.getPoId());
@@ -296,6 +303,9 @@ public class PurchaseOrdersController {
 	private void handleCancelPO() {
 		if (selectedPO == null) {
 			showError("Purchase order not found");
+			return;
+		}
+		if (!ConfirmDialog.confirm("Cancel Purchase Order", "Cancel PO #" + selectedPO.getPoId() + "?")) {
 			return;
 		}
 		try {
