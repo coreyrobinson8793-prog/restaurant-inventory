@@ -22,6 +22,7 @@ import com.coreyrobinson.inventory.model.Supplier;
 import com.coreyrobinson.inventory.model.Unit;
 import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.SupplierService;
+import com.coreyrobinson.inventory.util.MoneyFormatter;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -123,7 +124,7 @@ public class SuppliersController {
 		activeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isActive() ? "Active" : "Inactive"));
 		detailItemNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(itemNameMap.getOrDefault(cell.getValue().getItemId(), "?")));
 		detailSkuColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSupplierSku()));
-		detailPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPrice().toString()));
+		detailPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getPrice())));
 		detailPackSizeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPackSize().toString()));
 		detailPreferredColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isPreferred() ? "Yes" : "No"));
 		detailActionsColumn.setCellFactory(column -> new TableCell<ItemSupplier, Void>() {

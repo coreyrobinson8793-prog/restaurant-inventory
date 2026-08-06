@@ -24,6 +24,7 @@ import com.coreyrobinson.inventory.model.User;
 import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.PurchaseOrderService;
 import com.coreyrobinson.inventory.service.SupplierService;
+import com.coreyrobinson.inventory.util.MoneyFormatter;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -103,13 +104,13 @@ public class ReportsController {
 			return new SimpleStringProperty(d == null ? "" : d.format(DATE_FORMAT));
 		});
 		opUserColumn.setCellValueFactory(cell -> new SimpleStringProperty(userNameMap.getOrDefault(cell.getValue().getCreatedBy(), "?")));
-		opTotalColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getTotal())));
+		opTotalColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getTotal())));
 		spSupplierColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().supplierName())));
 		spPoCountColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().orderCount())));
-		spTotalColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().totalSpend().toString())));
+		spTotalColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().totalSpend())));
 		pcItemColumn.setCellValueFactory(cell -> new SimpleStringProperty(itemNameMap.getOrDefault(cell.getValue().getItemId(), "?")));
 		pcSupplierColumn.setCellValueFactory(cell -> new SimpleStringProperty(supplierNameMap.getOrDefault(cell.getValue().getSupplierId(), "?")));
-		pcPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getPrice().toString())));
+		pcPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getPrice())));
 		pcPackSizeColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getPackSize().toString())));
 		pcPreferredColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().isPreferred() ? "Yes" : "No")));
 		lowStockTable.setItems(lowStockList);

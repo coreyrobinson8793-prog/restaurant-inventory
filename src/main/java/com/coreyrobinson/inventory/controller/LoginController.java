@@ -16,11 +16,9 @@ import com.coreyrobinson.inventory.session.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 public class LoginController {
 	
@@ -40,8 +38,7 @@ public class LoginController {
 				Session.setCurrentUser(loggedInUser);
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
 				Parent root = loader.load();
-				Stage stage = (Stage) usernameField.getScene().getWindow();
-				stage.setScene(new Scene(root));
+				usernameField.getScene().setRoot(root);
 			} else {
 				messageLabel.setText("Invalid username or password.");
 				messageLabel.setStyle("-fx-text-fill: red;");

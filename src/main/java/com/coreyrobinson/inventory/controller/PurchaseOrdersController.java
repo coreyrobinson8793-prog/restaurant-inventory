@@ -24,6 +24,7 @@ import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.PurchaseOrderService;
 import com.coreyrobinson.inventory.service.SupplierService;
 import com.coreyrobinson.inventory.session.Session;
+import com.coreyrobinson.inventory.util.MoneyFormatter;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -120,18 +121,18 @@ public class PurchaseOrdersController {
 		poSupplierColumn.setCellValueFactory(cell -> new SimpleStringProperty(supplierNameMap.getOrDefault(cell.getValue().getSupplierId(), "?")));
 		poCreatedByColumn.setCellValueFactory(cell -> new SimpleStringProperty(userNameMap.getOrDefault(cell.getValue().getCreatedBy(), "?" )));
 		poStatusColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCurrentStatus()));
-		poTotalCostColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTotal().toString()));
+		poTotalCostColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getTotal())));
 		poCreatedDateColumn.setCellValueFactory(cell -> {
 			LocalDateTime d = cell.getValue().getCreatedDate();
 			return new SimpleStringProperty(d == null ? "" : d.format(DATE_FORMAT));
 		});
 		lineItemNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(itemNameMap.getOrDefault(cell.getValue().getItemId(), "?")));
 		lineQuantityColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getQuantityOrdered().toString()));
-		linePriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPriceAtTime().toString()));
+		linePriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getPriceAtTime())));
 		lineSubTotalColumn.setCellValueFactory(cell -> {
 			PurchaseOrderItem line = cell.getValue();
 			BigDecimal subtotal = line.getQuantityOrdered().multiply(line.getPriceAtTime());
-			return new SimpleStringProperty(subtotal.toString());
+			return new SimpleStringProperty(MoneyFormatter.format(subtotal));
 		});
 		lineActionsColumn.setCellFactory(column -> new TableCell<PurchaseOrderItem, Void>() {
 			private final Button removeButton = new Button("Remove");
