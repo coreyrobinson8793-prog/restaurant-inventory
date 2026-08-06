@@ -156,4 +156,23 @@ public class PriceImportService {
 		priceImportDao.save(newImport);
 		return newImport;
 	}
+	
+	/**
+	 * Returns history of all imports.
+	 * @return	The import history
+	 * @throws SQLException	Error from the database.
+	 */
+	public List<PriceImport> findImportHistory() throws SQLException {
+		return priceImportDao.findAll();
+	}
+	
+	/**
+	 * Finds a CSV template by supplier 
+	 * @param supplierId	Supplier I.D.
+	 * @return	The CSV template
+	 * @throws SQLException	Error from the database.
+	 */
+	public Optional<CsvImportTemplate> findTemplateBySupplier(int supplierId) throws SQLException {
+		return csvDao.findBySupplierId(supplierId);
+	}
 }

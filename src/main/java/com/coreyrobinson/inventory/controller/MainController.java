@@ -26,6 +26,7 @@ public class MainController {
 	@FXML private Label currentUserLabel;
 	@FXML private StackPane contentArea;
 	@FXML private Button usersButton;
+	@FXML private Button priceImportsButton;
 
 	@FXML 
 	private void initialize() {
@@ -35,6 +36,8 @@ public class MainController {
 			if ("Staff".equals(currentUser.getPosition())) {
 				usersButton.setVisible(false);
 				usersButton.setManaged(false);
+				priceImportsButton.setVisible(false);
+				priceImportsButton.setManaged(false);
 			}
 			loadView("/fxml/InventoryView.fxml");
 		}
@@ -86,6 +89,11 @@ public class MainController {
 	@FXML
 	private void handleNavReports() {
 		loadView("/fxml/ReportsView.fxml");
+	}
+	
+	@FXML
+	private void handleNavImports() {
+		loadView("/fxml/PriceImportView.fxml");
 	}
 
 }

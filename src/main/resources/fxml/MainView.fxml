@@ -51,6 +51,10 @@
             <Button fx:id="reportsButton" text="Reports" onAction="#handleNavReports"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    
+            <Button fx:id="priceImportsButton" text="Import CSV" onAction="#handleNavImports"
+            		maxWidth="Infinity" alignment="CENTER_LEFT"
+            		style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
             
             <!-- Spacer pushes logout to bottom -->
             <Region VBox.vgrow="ALWAYS"/>
