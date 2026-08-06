@@ -69,6 +69,8 @@
 			<columns>
 				<TableColumn text="Item" prefWidth="150"
 					fx:id="lineItemNameColumn" />
+				<TableColumn text="SKU" prefWidth="100" 
+					fx:id="lineSkuColumn" />
 				<TableColumn text="Quantity" prefWidth="100"
 					fx:id="lineQuantityColumn" />
 				<TableColumn text="Price" prefWidth="100"

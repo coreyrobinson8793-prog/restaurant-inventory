@@ -54,6 +54,7 @@ public class ReportsController {
 	@FXML private TableColumn <SupplierSpend, String> spTotalColumn;
 	@FXML private TableView <ItemSupplier> priceCompareTable;
 	@FXML private TableColumn<ItemSupplier, String> pcItemColumn;
+	@FXML private TableColumn<ItemSupplier, String> pcSkuColumn;
 	@FXML private TableColumn<ItemSupplier, String> pcSupplierColumn;
 	@FXML private TableColumn<ItemSupplier, String> pcPriceColumn;
 	@FXML private TableColumn<ItemSupplier, String> pcPackSizeColumn;
@@ -109,6 +110,7 @@ public class ReportsController {
 		spPoCountColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().orderCount())));
 		spTotalColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().totalSpend())));
 		pcItemColumn.setCellValueFactory(cell -> new SimpleStringProperty(itemNameMap.getOrDefault(cell.getValue().getItemId(), "?")));
+		pcSkuColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getSupplierSku()));
 		pcSupplierColumn.setCellValueFactory(cell -> new SimpleStringProperty(supplierNameMap.getOrDefault(cell.getValue().getSupplierId(), "?")));
 		pcPriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getPrice())));
 		pcPackSizeColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.valueOf(cell.getValue().getPackSize().toString())));

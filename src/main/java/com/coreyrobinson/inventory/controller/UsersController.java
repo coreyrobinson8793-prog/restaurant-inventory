@@ -26,7 +26,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 
 
@@ -41,7 +40,7 @@ public class UsersController {
 	@FXML private TableView<User> usersTable;
 	@FXML private TableColumn<User, String> usernameColumn;
 	@FXML private TableColumn<User, String> positionColumn;
-	@FXML private TableColumn<User, Boolean> activeColumn;
+	@FXML private TableColumn<User, String> activeColumn;
 	@FXML private TableColumn<User, String> createdAtColumn;
 	@FXML private TableColumn<User, Void> actionsColumn;
 	private UserService userService = new UserService();
@@ -51,9 +50,9 @@ public class UsersController {
 	private void initialize() {
 		roleChoiceBox.getItems().addAll("Manager", "Staff");
 		roleChoiceBox.setValue("Staff");	// default
-		usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-		positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
-		activeColumn.setCellValueFactory(new PropertyValueFactory<>("active"));
+		usernameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getUsername()));
+		positionColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPosition()));
+		activeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().isActive() ? "Active" : "Inactive"));
 		// formats the date in a more readable format
 		createdAtColumn.setCellValueFactory(cellData -> {
 			LocalDateTime created = cellData.getValue().getCreatedAt();

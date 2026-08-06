@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import com.coreyrobinson.inventory.dao.UserDAO;
 import com.coreyrobinson.inventory.model.Item;
+import com.coreyrobinson.inventory.model.ItemSupplier;
 import com.coreyrobinson.inventory.model.PurchaseOrder;
 import com.coreyrobinson.inventory.model.PurchaseOrderItem;
 import com.coreyrobinson.inventory.model.Supplier;
@@ -55,6 +56,7 @@ public class PurchaseOrdersController {
 	@FXML private Label poDetailHeaderLabel;
 	@FXML private TableView<PurchaseOrderItem> lineItemsTable;
 	@FXML private TableColumn<PurchaseOrderItem, String> lineItemNameColumn;
+	@FXML private TableColumn<PurchaseOrderItem, String> lineSkuColumn;
 	@FXML private TableColumn<PurchaseOrderItem, String> lineQuantityColumn;
 	@FXML private TableColumn<PurchaseOrderItem, String> linePriceColumn;
 	@FXML private TableColumn<PurchaseOrderItem, String> lineSubTotalColumn;
@@ -73,6 +75,7 @@ public class PurchaseOrdersController {
 	private ItemService itemService = new ItemService();
 	private ObservableList<PurchaseOrderItem> lineItemsList = FXCollections.observableArrayList();
 	private Map<Integer, String> itemNameMap;
+	private Map<Integer, String> skuByItemMap = new HashMap<>();
 	private PurchaseOrder selectedPO;
 
 	@FXML
@@ -128,6 +131,7 @@ public class PurchaseOrdersController {
 			return new SimpleStringProperty(d == null ? "" : d.format(DATE_FORMAT));
 		});
 		lineItemNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(itemNameMap.getOrDefault(cell.getValue().getItemId(), "?")));
+		lineSkuColumn.setCellValueFactory(cell -> new SimpleStringProperty(skuByItemMap.getOrDefault(cell.getValue().getItemId(), "")));
 		lineQuantityColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getQuantityOrdered().toString()));
 		linePriceColumn.setCellValueFactory(cell -> new SimpleStringProperty(MoneyFormatter.format(cell.getValue().getPriceAtTime())));
 		lineSubTotalColumn.setCellValueFactory(cell -> {
@@ -169,6 +173,11 @@ public class PurchaseOrdersController {
 		poDetailHeaderLabel.setText("PO #" + po.getPoId() + " - " + po.getCurrentStatus());
 		try {
 			List<PurchaseOrderItem> lineItems = poService.findLineItems(po.getPoId());
+			List<ItemSupplier> links = supplierService.findItemsForSupplier(po.getSupplierId());
+			skuByItemMap.clear();
+			for (ItemSupplier link : links) {
+				skuByItemMap.put(link.getItemId(), link.getSupplierSku());
+			}
 			lineItemsList.setAll(lineItems);
 		} catch (SQLException e) {
 			showError("Error loading line items: " + e.getMessage());

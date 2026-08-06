@@ -53,6 +53,7 @@
 	  			<TableView fx:id="priceCompareTable" VBox.vgrow="ALWAYS">
 	  				<columns>
 	  					<TableColumn text="Item" prefWidth="150" fx:id="pcItemColumn" />
+	  					<TableColumn text="SKU" prefWidth="100" fx:id="pcSkuColumn" />
 	  					<TableColumn text="Supplier" prefWidth="150" fx:id="pcSupplierColumn" />
 	  					<TableColumn text="Price" prefWidth="100" fx:id="pcPriceColumn" />
 	  					<TableColumn text="Pack Size" prefWidth="100" fx:id="pcPackSizeColumn" />
