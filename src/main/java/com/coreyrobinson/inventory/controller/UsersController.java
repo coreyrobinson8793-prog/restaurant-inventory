@@ -62,6 +62,7 @@ public class UsersController {
 		actionsColumn.setCellFactory(column -> new TableCell<User, Void>() {	// Each cell creates a button.
 			private final Button deactivateButton = new Button("Deactivate");
 			{
+				deactivateButton.getStyleClass().add("action-button");
 				deactivateButton.setOnAction(event -> {	// Gets the user from that row and calls "handleDeactivate".
 					User user = getTableView().getItems().get(getIndex());
 					handleDeactivate(user);

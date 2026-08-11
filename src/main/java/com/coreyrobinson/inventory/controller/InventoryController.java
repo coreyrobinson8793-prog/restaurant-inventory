@@ -109,10 +109,12 @@ public class InventoryController {
 			    private final HBox buttons = new HBox(5, editButton, deactivateButton);
 			    
 			    {
+			    	deactivateButton.getStyleClass().add("action-button");
 			        deactivateButton.setOnAction(event -> {
 			            Item item = getTableView().getItems().get(getIndex());
 			            handleDeactivate(item);
 			        });
+			        editButton.getStyleClass().add("action-button");
 			        editButton.setOnAction(event -> {
 			        	Item item = getTableView().getItems().get(getIndex());
 			        	try {

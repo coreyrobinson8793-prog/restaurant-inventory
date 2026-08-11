@@ -34,34 +34,34 @@
             
             <Button fx:id="inventoryButton" text="Inventory" onAction="#handleNavInventory"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    styleClass="nav-button"/>
             
             <Button fx:id="suppliersButton" text="Suppliers" onAction="#handleNavSuppliers"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    styleClass="nav-button"/>
             
             <Button fx:id="ordersButton" text="Purchase Orders" onAction="#handleNavOrders"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    styleClass="nav-button"/>
             
             <Button fx:id="usersButton" text="Users" onAction="#handleNavUsers"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    styleClass="nav-button"/>
             
             <Button fx:id="reportsButton" text="Reports" onAction="#handleNavReports"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    styleClass="nav-button"/>
                     
             <Button fx:id="priceImportsButton" text="Import CSV" onAction="#handleNavImports"
             		maxWidth="Infinity" alignment="CENTER_LEFT"
-            		style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+            		styleClass="nav-button"/>
             
             <!-- Spacer pushes logout to bottom -->
             <Region VBox.vgrow="ALWAYS"/>
             
             <Button fx:id="logoutButton" text="Log Out" onAction="#handleLogout"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
-                    style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10;"/>
+                    styleClass="logout-button"/>
         </VBox>
     </left>
     

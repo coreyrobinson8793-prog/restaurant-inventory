@@ -133,6 +133,7 @@ public class SuppliersController {
 			private final Button unlinkButton = new Button("Unlink");
 			private final HBox buttons = new HBox(5, preferredButton, unlinkButton);
 			{
+				preferredButton.getStyleClass().add("action-button");
 				preferredButton.setOnAction(event -> {
 					ItemSupplier link = getTableView().getItems().get(getIndex());
 					if (link.isPreferred()) {
@@ -141,6 +142,7 @@ public class SuppliersController {
 						handleSetPreferred(link);
 					}
 				});
+				unlinkButton.getStyleClass().add("action-button");
 				unlinkButton.setOnAction(event -> {
 					ItemSupplier link = getTableView().getItems().get(getIndex());
 					handleUnlink(link);
@@ -163,6 +165,7 @@ public class SuppliersController {
 			private final Button deactivateButton = new Button("Deactivate");
 			private final HBox buttons = new HBox(5, editButton, deactivateButton);
 			{
+				editButton.getStyleClass().add("action-button");
 				editButton.setOnAction(event -> {
 					Supplier supplier = getTableView().getItems().get(getIndex());
 					try {
@@ -183,6 +186,7 @@ public class SuppliersController {
 						e.printStackTrace();
 					}
 				});
+				deactivateButton.getStyleClass().add("action-button");
 				deactivateButton.setOnAction(event -> {
 					Supplier supplier = getTableView().getItems().get(getIndex());
 					handleDeactivate(supplier);

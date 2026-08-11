@@ -21,6 +21,7 @@ public class MainApp extends Application {
 		Parent root = loader.load();
 		Scene scene = new Scene(root);
 		primaryStage.setTitle("Tailgate Tavern - Inventory Management");
+		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();		
 	}

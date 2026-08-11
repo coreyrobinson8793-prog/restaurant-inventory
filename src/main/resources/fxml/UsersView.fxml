@@ -11,9 +11,9 @@
 		<Insets top="40" right="20" left="20" bottom="15" />
 	</padding>
 	<Label text="Users"
-		style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+		styleClass="screen-header" />
 	<Label text="Add New User"
-		style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+		styleClass="section-label" />
 	<HBox spacing="10" alignment="CENTER_LEFT">
 		<TextField fx:id="usernameField" promptText="Username" />
 		<PasswordField fx:id="passwordField"

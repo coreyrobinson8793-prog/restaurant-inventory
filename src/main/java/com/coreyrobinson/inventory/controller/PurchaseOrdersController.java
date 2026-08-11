@@ -142,6 +142,7 @@ public class PurchaseOrdersController {
 		lineActionsColumn.setCellFactory(column -> new TableCell<PurchaseOrderItem, Void>() {
 			private final Button removeButton = new Button("Remove");
 			{
+				removeButton.getStyleClass().add("action-button");
 				removeButton.setOnAction(event -> {
 					PurchaseOrderItem lineItem = getTableView().getItems().get(getIndex());
 					handleRemoveLineItem(lineItem);

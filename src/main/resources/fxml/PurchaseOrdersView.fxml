@@ -20,9 +20,9 @@
 			<Insets top="40" right="20" left="20" bottom="15" />
 		</padding>
 		<Label text="Purchase Orders"
-			style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+			styleClass="screen-header" />
 		<Label text="Add New Purchase Order"
-			style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+			styleClass="section-label" />
 		<GridPane hgap="10" vgap="5">
 			<padding>
 				<Insets top="10" right="10" bottom="10" left="10" />
@@ -60,7 +60,7 @@
 			<Insets top="40" right="20" left="20" bottom="15" />
 		</padding>
 		<Label fx:id="poDetailHeaderLabel" text="Select a Purchase Order"
-			style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+			styleClass="screen-header" />
 		<HBox spacing="10" alignment="CENTER_RIGHT">
 			<Button onAction="#handleReceivePO" text="Receive Order" fx:id="receiveButton" disable="true" />
 			<Button onAction="#handleCancelPO" text="Cancel Order" fx:id="cancelButton" disable="true" />
@@ -86,7 +86,7 @@
 				<Insets top="10" right="10" bottom="10" left="10" />
 			</padding>
 			<Label text="Add Line Item" GridPane.rowIndex="0" GridPane.columnIndex="0"
-				style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+				styleClass="section-label" />
 			<Label text="Item" prefWidth="100" GridPane.rowIndex="1"
 				GridPane.columnIndex="0" />
 			<Label text="Quantity" prefWidth="100" GridPane.rowIndex="2"
