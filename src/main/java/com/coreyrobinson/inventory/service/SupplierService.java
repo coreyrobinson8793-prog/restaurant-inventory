@@ -105,7 +105,7 @@ public class SupplierService {
 	}
 
 	/**
-	 * Links an item with a supplier.
+	 * Links an item with a supplier or revives a deactivated link.
 	 * @param itemId	I.D. of the item.
 	 * @param supplierId	I.D. of the supplier.
 	 * @param supplierSku	Sku number of the item.
@@ -120,6 +120,17 @@ public class SupplierService {
 		validateItemSupplierFields(price, packSize, supplierSku);
 		Optional<ItemSupplier> existing = itemSupplierDao.findByItemAndSupplier(itemId, supplierId);
 		if (existing.isPresent()) {
+			ItemSupplier existingLinkItemSupplier = existing.get();
+			if (!existingLinkItemSupplier.isActive() ) {
+				existingLinkItemSupplier.setSupplierSku(supplierSku);
+				existingLinkItemSupplier.setPackSize(packSize);
+				existingLinkItemSupplier.setPackUnitId(packUnitId);
+				existingLinkItemSupplier.setPrice(price);
+				existingLinkItemSupplier.setActive(true);
+				existingLinkItemSupplier.setLastPriceUpdate(LocalDateTime.now());
+				existingLinkItemSupplier.setPreferred(false);
+				return itemSupplierDao.save(existingLinkItemSupplier);
+			}
 			throw new IllegalArgumentException("Supplier already linked to this item.");
 		}		
 		ItemSupplier linkItemSupplier = new ItemSupplier();
