@@ -1,57 +1,124 @@
 # Tailgate Tavern Inventory Management System
 
-A JavaFX desktop application for managing restaurant inventory, suppliers, purchase orders, and price comparisons. Built as a portfolio project demonstrating full-stack Java development with a focus on hospitality industry workflows.
+A JavaFX desktop application for managing restaurant inventory, suppliers, purchase orders, and supplier price imports. Built as a portfolio project demonstrating full-stack Java development against a normalized MySQL schema, with a focus on real hospitality workflows.
+
+## Screenshots
+
+![Purchase Orders](docs/screenshots/PO_master_detail.PNG)
+
+_The Purchase Orders screen. Order list on the left, line items and status controls on the right._
+
+![Reports](docs/screenshots/reports.PNG)
+
+_The Reports screen. Currently displaying the low stock tab._
+
+![Suppliers](docs/screenshots/supplier_link.PNG)
+
+_The Suppliers screen. Suppliers on the left, items linked with a selected supplier on the right._
+
+![Import CSV](docs/screenshots/price_imports.PNG)
+
+_The Import CSV screen. Imports prices, saves one template per supplier, and show the import history._
 
 ## Features
 
-### Current (Phase 1: Authentication)
+### Authentication & Users
 
-- Multi-user authentication with BCrypt password hashing
-- Role-based access (Manager / Staff)
-- Account lockout protection (5 failed attempts trigger a 10 minute lockout)
+- Multi-user login with BCrypt password hashing
+- Role-based access (Manager / Staff) — Staff cannot reach the Users or Price Import screens
+- Account lockout after 5 failed attempts (10 minute cooldown)
 - Session management with logout
-- JavaFX login UI with form validation and error handling
-- MySQL backend with normalized schema (13 tables)
 
-### Planned (Phase 2: Inventory Management)
+### Inventory
 
-- Item CRUD with category support
-- Multi-supplier price tracking with junction-table relationships
-- Low-stock alerts based on configurable par-stock levels
-- Stock receiving and usage tracking
-- Audit trail for all changes
+- Item creation and editing with unit of measure and category
+- Par-stock levels per item, with current stock tracking
+- Soft delete (deactivation) so historical records stay intact
+- Modal edit dialog with validation
 
-### Planned (Phase 3: Purchasing)
+### Suppliers
 
-- Per-supplier purchase order generation
-- One-way PO state transitions (Draft to Finalized to Sent)
-- Price comparison across suppliers (per-unit normalization)
-- CSV price import per supplier
+- Supplier records with representative, contact, and address details
+- Many-to-many item/supplier relationships via a junction table, each carrying the supplier's SKU, price, pack size, and pack unit
+- One preferred supplier per item, with a toggle to set or clear it
+- Automatic price-change timestamping
+
+### Purchase Orders
+
+- Purchase orders created per supplier, with line items
+- **Price snapshotting** — each line records the supplier's price at the time of ordering, so later price changes never rewrite order history
+- Order totals recalculated automatically from line items
+- Status lifecycle: `OPEN → RECEIVED` or `OPEN → CANCELLED`, with guards preventing invalid transitions
+- Status-driven UI: receive/cancel controls enable only for open orders
+
+### Reports
+
+- **Low Stock** — active items below par, with the shortage quantity
+- **Open Purchase Orders** — everything currently on order
+- **Spend by Supplier** — received-order counts and totals, aggregated per supplier
+- **Price Comparison** — every item/supplier price, grouped by item, with preferred status
+
+### CSV Price Import
+
+- Per-supplier import templates: because every distributor formats their export differently, each supplier stores the column headings that hold the SKU and price, plus which row the headings are on
+- Parses real vendor exports with OpenCSV (handles quoted fields, embedded commas, currency symbols)
+- Matches rows by supplier SKU and bulk-updates prices
+- Per-row error handling — a malformed price or unmatched SKU is skipped, not fatal
+- Every run is logged with row counts (processed / updated / skipped) and viewable as import history
+
+## Business Rules
+
+A few rules that cut across layers:
+
+- An item on an **open** purchase order cannot be deactivated (enforced across the item and purchase-order services)
+- Line items may only be added to items the supplier actually carries — the price comes from the item/supplier link, not free entry
+- A received order cannot be cancelled, and a cancelled order cannot be received
+- Only one supplier may be marked preferred per item
+
+Full documentation in [`BUSINESS_RULES.md`](BUSINESS_RULES.md).
 
 ## Tech Stack
 
 - **Language:** Java 21
-- **UI Framework:** JavaFX 21
-- **Build Tool:** Maven
+- **UI:** JavaFX 21 with FXML and an external CSS stylesheet
 - **Database:** MySQL 8
-- **Database Access:** JDBC with PreparedStatements
-- **Password Hashing:** jBCrypt
-- **Architecture:** MVC with DAO/Service layer separation
+- **Database access:** JDBC with PreparedStatements throughout
+- **Build:** Maven
+- **Libraries:** OpenCSV 5.9 (CSV parsing), jBCrypt (password hashing)
+- **Architecture:** MVC with DAO / Service layer separation
+
+## Architecture
+
+The application is layered, and each layer has one job:
+
+- **`model/`** — plain domain objects (13 entities), no logic
+- **`dao/`** — all SQL lives here. One DAO per table, each owning its own CRUD and finders. Nothing above this layer writes SQL.
+- **`service/`** — business rules and validation. Services coordinate multiple DAOs, enforce invariants (status transitions, preferred-supplier uniqueness, cross-entity constraints), and throw `IllegalArgumentException` for rule violations.
+- **`controller/`** — JavaFX controllers. UI wiring and user feedback only; they call services, never DAOs.
+- **`util/`** — database connection, currency formatting, confirmation dialogs.
+
+The separation means business rules are testable without a UI and enforced no matter which screen calls them — the CSV import and the Suppliers screen both update prices through the same validated service method.
 
 ## Project Structure
 
     src/main/java/com/coreyrobinson/inventory/
-      app/         - JavaFX entry point and test classes
+      app/         - JavaFX entry point and manual test harnesses
       controller/  - JavaFX controllers
-      dao/         - Data Access Objects (database operations)
-      model/       - Domain entity classes
-      service/     - Business logic layer
-      session/     - Logged-in user session management
-      util/        - Database connection utility
+      dao/         - Data Access Objects (13)
+      model/       - Domain entities (13)
+      service/     - Business logic layer (5)
+      session/     - Logged-in user session
+      util/        - DB connection, money formatting, dialogs
 
     src/main/resources/
-      fxml/        - JavaFX view layouts
+      fxml/        - View layouts
+      css/         - Application stylesheet
       database.properties.example - Template for DB credentials
+
+    database/
+      schema.sql            - Database and table creation
+      migration_001..004    - Incremental schema changes
+      demo_data.sql         - Optional sample data
 
 ## Getting Started
 
@@ -63,22 +130,33 @@ A JavaFX desktop application for managing restaurant inventory, suppliers, purch
 
 ### Setup
 
-1. Clone the repository
-2. Run the SQL scripts in the `database/` folder in order:
+1. Clone the repository.
+2. Run the SQL scripts in `database/` **in order**:
    - `schema.sql` — creates the database and all tables
-   - `migration_001_add_lockout_fields.sql` — adds login lockout fields
-   - `migration_002_supplier_junction_categories.sql` — adds categories and the supplier junction tables
-3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials
-4. Run `mvn javafx:run` to start the application
+   - `migration_001_add_lockout_fields.sql`
+   - `migration_002_supplier_junction_categories.sql`
+   - `migration_003_update_po_status.sql`
+   - `migration_004_seed_categories.sql`
+3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials.
+4. Create the first Manager account by running `app/RegisterTestUser.java`.
+5. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
+6. Start the application with `mvn javafx:run`.
 
-### First Run
+### Trying the CSV import
 
-Use `RegisterTestUser.java` to create the first Manager account, then log in through the main application.
+With the demo data loaded, the U.S. Foods supplier already has an import template configured (`Product Number` / `Product Price`, header row 1). Point the Price Imports screen at a supplier price export and the app will match rows by SKU and update the prices it recognizes, skipping the rest.
 
-## Business Rules
+## Planned Enhancements
 
-Full business rules documentation in `BUSINESS_RULES.md`, covering authentication, inventory, suppliers, purchasing, and reporting.
+- Search and filter on the inventory and purchase order tables
+- Editing an existing item/supplier link (currently create and unlink only)
+- Admin screen for managing units of measure and categories
+- Stock transaction logging, so receiving a purchase order increments on-hand quantities
+- Audit log and price history tables (schema exists; DAOs not yet built)
+- Filter the purchase order item dropdown to items the selected supplier carries
+- Surface low-stock and price-comparison data directly on the Purchase Orders screen
+- Native desktop packaging with `jpackage`
 
 ## Author
 
-Corey Robinson — pursuing a transition from 17 years in hospitality to software development. Currently completing an Associate's degree in Computer Technology at Trident Technical College.
+Corey Robinson — transitioning from 17 years in hospitality to software development, currently completing an Associate's degree in Computer Technology at Trident Technical College.
