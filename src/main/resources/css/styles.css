@@ -43,3 +43,9 @@
 .logout-button:hover {
     -fx-background-color: #a93226;
 }
+
+.help-text {
+	-fx-font-size: 11px;
+	-fx-text-fill: #7f8c8d;
+	-fx-font-style: italic;
+}

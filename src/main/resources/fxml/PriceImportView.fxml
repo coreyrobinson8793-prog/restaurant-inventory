@@ -15,6 +15,8 @@
 	<Label fx:id="messageLabel" style="-fx-font-size: 12px;" />
 	<Label text="Template"
 			styleClass="section-label" />
+	<Label text="Each supplier may format their price file differently. Enter the name of the SKU and price columns, and which numeric row those headings are on." 
+		wrapText="true" styleClass="help-text"/>
 	<GridPane hgap="10" vgap="5">
 		<padding>
 			<Insets top="10" right="10" bottom="10" left="10" />
@@ -23,18 +25,21 @@
 			GridPane.columnIndex="0" />
 		<ChoiceBox fx:id="supplierChoiceBox" prefWidth="120"
 			GridPane.rowIndex="1" GridPane.columnIndex="0" />
-		<Label text="SKU" GridPane.rowIndex="0"
+		<Label text="SKU Column Name" GridPane.rowIndex="0"
 			GridPane.columnIndex="1" />
 		<TextField fx:id="skuColumnField" prefWidth="150"
-			GridPane.rowIndex="1" GridPane.columnIndex="1" />
-		<Label text="Price" GridPane.rowIndex="0"
+			GridPane.rowIndex="1" GridPane.columnIndex="1"
+			promptText="e.g. Product Number" />
+		<Label text="Price Column Name" GridPane.rowIndex="0"
 			GridPane.columnIndex="2" />
 		<TextField fx:id="priceColumnField" prefWidth="150"
-			GridPane.rowIndex="1" GridPane.columnIndex="2" />
-		<Label text="Header Row" GridPane.rowIndex="0"
+			GridPane.rowIndex="1" GridPane.columnIndex="2"
+			promptText="e.g. Product Price" />
+		<Label text="Header Row Number" GridPane.rowIndex="0"
 			GridPane.columnIndex="3" />
 		<TextField fx:id="headerField" prefWidth="120"
-			GridPane.rowIndex="1" GridPane.columnIndex="3" />
+			GridPane.rowIndex="1" GridPane.columnIndex="3"
+			promptText="e.g. 1" />
 	</GridPane>
 	<Button onAction="#handleSaveTemplate" text="Save Template" />
 	<Label text="Import"
