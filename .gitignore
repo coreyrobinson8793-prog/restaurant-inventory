@@ -28,3 +28,10 @@ Desktop.ini
 
 # Folder for sharing project zips with Claude
 Alpha_for_claude/
+
+# Build Artifact
+dependency-reduced-pom.xml
+
+installer/
+
+database.properties
