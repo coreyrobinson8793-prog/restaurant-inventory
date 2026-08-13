@@ -102,7 +102,7 @@ The separation means business rules are testable without a UI and enforced no ma
 ## Project Structure
 
     src/main/java/com/coreyrobinson/inventory/
-      app/         - JavaFX entry point and manual test harnesses
+      app/         - JavaFX entry point, packaging launcher, and manual test harnesses
       controller/  - JavaFX controllers
       dao/         - Data Access Objects (13)
       model/       - Domain entities (13)
@@ -137,7 +137,7 @@ The separation means business rules are testable without a UI and enforced no ma
    - `migration_002_supplier_junction_categories.sql`
    - `migration_003_update_po_status.sql`
    - `migration_004_seed_categories.sql`
-3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials.
+3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials. If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
 4. Create the first Manager account by running `app/RegisterTestUser.java`.
 5. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
 6. Start the application with `mvn javafx:run`.
@@ -145,6 +145,29 @@ The separation means business rules are testable without a UI and enforced no ma
 ### Trying the CSV import
 
 With the demo data loaded, the U.S. Foods supplier already has an import template configured (`Product Number` / `Product Price`, header row 1). Point the Price Imports screen at a supplier price export and the app will match rows by SKU and update the prices it recognizes, skipping the rest.
+
+## Packaging
+
+The application can be built as a native Windows installer with a bundled Java runtime, so the target machine does not need Java installed.
+
+    mvn clean package
+
+produces a self-contained jar in `target/`. From the project root:
+
+    jpackage --type exe ^
+      --name "Tailgate Tavern Inventory" ^
+      --app-version 1.0 ^
+      --vendor "Corey Robinson" ^
+      --input target ^
+      --main-jar restaurant-inventory-0.0.1-SNAPSHOT.jar ^
+      --main-class com.coreyrobinson.inventory.app.Launcher ^
+      --win-menu ^
+      --win-shortcut ^
+      --dest installer
+
+Requires JDK 21 and [WiX Toolset v3](https://github.com/wixtoolset/wix3/releases).
+
+The installed application reads `database.properties` from the directory containing the executable, so no credentials are compiled into the distributed build. MySQL must still be installed and reachable on the target machine.
 
 ## Planned Enhancements
 
@@ -155,7 +178,6 @@ With the demo data loaded, the U.S. Foods supplier already has an import templat
 - Audit log and price history tables (schema exists; DAOs not yet built)
 - Filter the purchase order item dropdown to items the selected supplier carries
 - Surface low-stock and price-comparison data directly on the Purchase Orders screen
-- Native desktop packaging with `jpackage`
 
 ## Author
 
