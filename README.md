@@ -1,6 +1,6 @@
 # Tailgate Tavern Inventory Management System
 
-A JavaFX desktop application for managing restaurant inventory, suppliers, purchase orders, and supplier price imports. Built as a portfolio project demonstrating full-stack Java development against a normalized MySQL schema, with a focus on real hospitality workflows.
+A JavaFX desktop application for managing restaurant inventory, suppliers, purchase orders, and supplier price imports. Deployed and in use with real data to replace spreadsheet inventory management at the restaurant where I work.
 
 ## Screenshots
 
@@ -18,7 +18,7 @@ _The Suppliers screen. Suppliers on the left, items linked with a selected suppl
 
 ![Import CSV](docs/screenshots/price_imports.PNG)
 
-_The Import CSV screen. Imports prices, saves one template per supplier, and show the import history._
+_The Import CSV screen. Imports prices, saves one template per supplier, and shows the import history._
 
 ## Features
 
@@ -132,12 +132,15 @@ The separation means business rules are testable without a UI and enforced no ma
 
 1. Clone the repository.
 2. Run the SQL scripts in `database/` **in order**:
-   - `schema.sql` — creates the database and all tables
+   - `schema.sql` — creates the database and base tables
    - `migration_001_add_lockout_fields.sql`
    - `migration_002_supplier_junction_categories.sql`
    - `migration_003_update_po_status.sql`
    - `migration_004_seed_categories.sql`
-3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials. If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
+3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials.
+   - Recommended to create a dedicated MySQL user with `SELECT/INSERT/UPDATE/DELETE` permissions for this database only, rather than using the root user.
+   - If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
+   - If you change `database.properties` after building, re-run `mvn clean compile`.
 4. Create the first Manager account by running `app/RegisterTestUser.java`.
 5. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
 6. Start the application with `mvn javafx:run`.
@@ -167,7 +170,9 @@ produces a self-contained jar in `target/`. From the project root:
 
 Requires JDK 21 and [WiX Toolset v3](https://github.com/wixtoolset/wix3/releases).
 
-The installed application reads `database.properties` from the directory containing the executable, so no credentials are compiled into the distributed build. MySQL must still be installed and reachable on the target machine.
+The installed application reads `database.properties` from the directory containing the executable, so no credentials are compiled into the distributed build. You must copy `database.properties` into the executable's directory manually. MySQL must still be installed and reachable on the target machine.
+
+Currently, the installer cannot create the initial Manager account. `RegisterTestUser` requires a JDK and Maven, meaning a first-time deployment currently needs the source checkout even though the installed app doesn't. A first-run setup screen is planned.
 
 ## Planned Enhancements
 
