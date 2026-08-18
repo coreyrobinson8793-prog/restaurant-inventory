@@ -3,6 +3,7 @@ Corey Robinson
 Tailgate Tavern Inventory Tables
 04/29/26
 */
+CREATE DATABASE IF NOT EXISTS restaurant_inventory;
 USE restaurant_inventory;
 CREATE TABLE users	/*stores login accounts*/
 (

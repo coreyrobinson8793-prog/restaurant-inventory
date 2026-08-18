@@ -1,6 +1,7 @@
 -- migration_004: seed item categories
 -- Reference data, not a schema change. Safe to re-run only if
 -- categories are empty (categoryName is UNIQUE).
+USE restaurant_inventory;
 INSERT INTO restaurant_inventory.categories (categoryName, description) VALUES
 ('Beef', 'Ground beef, patties, steaks, and other beef products'),
 ('Poultry', 'Chicken, turkey, and other poultry'),
