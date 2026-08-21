@@ -101,6 +101,8 @@ The separation means business rules are testable without a UI and enforced no ma
 
 ## Project Structure
 
+    database.properties    - DB credentials (project root, gitignored)
+    
     src/main/java/com/coreyrobinson/inventory/
       app/         - JavaFX entry point, packaging launcher, and manual test harnesses
       controller/  - JavaFX controllers
@@ -137,10 +139,9 @@ The separation means business rules are testable without a UI and enforced no ma
    - `migration_002_supplier_junction_categories.sql`
    - `migration_003_update_po_status.sql`
    - `migration_004_seed_categories.sql`
-3. Copy `src/main/resources/database.properties.example` to `database.properties` and fill in your MySQL credentials.
+3. Copy `src/main/resources/database.properties.example` to `database.properties` in the project root and fill in your MySQL credentials. The application reads it from the working directory at startup.
    - Recommended to create a dedicated MySQL user with `SELECT/INSERT/UPDATE/DELETE` permissions for this database only, rather than using the root user.
    - If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
-   - If you change `database.properties` after building, re-run `mvn clean compile`.
 4. Create the first Manager account by running `app/RegisterTestUser.java`.
 5. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
 6. Start the application with `mvn javafx:run`.
