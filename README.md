@@ -24,6 +24,7 @@ _The Import CSV screen. Imports prices, saves one template per supplier, and sho
 
 ### Authentication & Users
 
+- First launch setup screen that creates the initial Manager account
 - Multi-user login with BCrypt password hashing
 - Role-based access (Manager / Staff) — Staff cannot reach the Users or Price Import screens
 - Account lockout after 5 failed attempts (10 minute cooldown)
@@ -142,9 +143,8 @@ The separation means business rules are testable without a UI and enforced no ma
 3. Copy `src/main/resources/database.properties.example` to `database.properties` in the project root and fill in your MySQL credentials. The application reads it from the working directory at startup.
    - Recommended to create a dedicated MySQL user with `SELECT/INSERT/UPDATE/DELETE` permissions for this database only, rather than using the root user.
    - If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
-4. Create the first Manager account by running `app/RegisterTestUser.java`.
-5. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
-6. Start the application with `mvn javafx:run`.
+4. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
+5. Start the application with `mvn javafx:run`. On first launch, the application detects that no Manager account exists and prompts you to create one. 
 
 ### Trying the CSV import
 
@@ -172,8 +172,6 @@ produces a self-contained jar in `target/`. From the project root:
 Requires JDK 21 and [WiX Toolset v3](https://github.com/wixtoolset/wix3/releases).
 
 The installed application reads `database.properties` from the directory containing the executable, so no credentials are compiled into the distributed build. You must copy `database.properties` into the executable's directory manually. MySQL must still be installed and reachable on the target machine.
-
-Currently, the installer cannot create the initial Manager account. `RegisterTestUser` requires a JDK and Maven, meaning a first-time deployment currently needs the source checkout even though the installed app doesn't. A first-run setup screen is planned.
 
 ## Planned Enhancements
 
