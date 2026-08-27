@@ -270,4 +270,24 @@ public class UserDAO {
 		return user;
 	}
 
+	/**
+	 * Checks if a manager exists in the database.
+	 * @return true if a manager exists, false otherwise.
+	 * @throws SQLException
+	 */
+	public boolean managerExists() throws SQLException {
+		String sql = "SELECT COUNT(*) FROM users WHERE position = 'Manager' AND is_active = true";
+		try (Connection conn = DatabaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
+			try (ResultSet rs = stmt.executeQuery()) {
+				rs.next();
+				int count = rs.getInt(1);
+				return count > 0;
+			}
+		}
+	}
+
 }
+
+
+

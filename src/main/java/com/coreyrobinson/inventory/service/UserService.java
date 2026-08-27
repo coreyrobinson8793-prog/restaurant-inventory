@@ -33,7 +33,7 @@ public class UserService {
 		if (username == null || username.isBlank()) {
 			throw new IllegalArgumentException("Username cannot be empty");
 		}
-		if (plainPassword.length() < 8 || plainPassword == null) {
+		if (plainPassword == null || plainPassword.length() < 8) {
 			throw new IllegalArgumentException("Password must be at least 8 characters");
 		}
 		if (!"Manager".equals(position) && !"Staff".equals(position)) {
