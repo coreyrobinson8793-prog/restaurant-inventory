@@ -15,9 +15,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MainController {
 
@@ -53,6 +56,29 @@ public class MainController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
+	}
+	
+	/**
+	 * Opens a modal dialog for changing the user's password.
+	 */
+	@FXML
+	private void handleChangePassword() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChangePassword.fxml"));
+			Parent root = loader.load();
+			Stage dialog = new Stage();
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.initOwner(currentUserLabel.getScene().getWindow());
+			dialog.setTitle("Change Password");
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+			dialog.setScene(scene);
+			dialog.setResizable(false);
+			dialog.showAndWait();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 	}
 
 	@FXML

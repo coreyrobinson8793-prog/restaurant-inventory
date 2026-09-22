@@ -8,6 +8,7 @@ package com.coreyrobinson.inventory.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import com.coreyrobinson.inventory.service.UserService;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +24,10 @@ public class SetupController {
 	@FXML private Label messageLabel;
 	private final UserService userService = new UserService();
 
+	/**
+	 * Handles the creation of a manager account. Validates input fields and registers the user.
+	 * If successful, transitions to the login screen.
+	 */
 	@FXML
 	private void handleCreateManager() {
 		String username = usernameField.getText().trim();

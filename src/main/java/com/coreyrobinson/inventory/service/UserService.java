@@ -15,11 +15,11 @@ import com.coreyrobinson.inventory.model.User;
 
 
 public class UserService {
-	
+
 	private final UserDAO userDao = new UserDAO();	// will change to to dependency injection
 	private static final int MAX_FAILED_ATTEMPTS = 5;
 	private static final int LOCKOUT_DURATION_MINUTES = 10;
-	
+
 	/**
 	 * Registers a new user for the application.
 	 * @param username	User's requested username.
@@ -33,9 +33,7 @@ public class UserService {
 		if (username == null || username.isBlank()) {
 			throw new IllegalArgumentException("Username cannot be empty");
 		}
-		if (plainPassword == null || plainPassword.length() < 8) {
-			throw new IllegalArgumentException("Password must be at least 8 characters");
-		}
+		validatePassword(plainPassword);
 		if (!"Manager".equals(position) && !"Staff".equals(position)) {
 			throw new IllegalArgumentException("Position must be 'Manager' or 'Staff'");
 		}
@@ -47,7 +45,35 @@ public class UserService {
 		User user = new User(username, hashedPassword, position);
 		return userDao.save(user);
 	}
-	
+
+	/**
+	 * Changes a user's password.
+	 * @param userId	The user changing their password.
+	 * @param currentPassword	The user's current password.
+	 * @param newPassword	The user's new password.
+	 * @return	The updated user.
+	 * @throws SQLException	If the user cannot be updated in the database.
+	 * @throws IllegalArgumentException If the user is not found, the current password is incorrect, or the new password is too short.
+	 * @throws IllegalArgumentException If the new password is the same as the current password.
+	 */
+	public User changePassword(int userId, String currentPassword, String newPassword) throws SQLException {
+		Optional<User> optUser = userDao.findByUserId(userId);
+		if (!optUser.isPresent()) {
+			throw new IllegalArgumentException("User not found");
+		}
+		User user = optUser.get();
+		if (!BCrypt.checkpw(currentPassword, user.getPasswordHash())) {
+			throw new IllegalArgumentException("Current password is incorrect");
+		}
+		validatePassword(newPassword);
+		if (BCrypt.checkpw(newPassword, user.getPasswordHash())) {
+			throw new IllegalArgumentException("New password cannot be the same as the current password");
+		}
+		String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		user.setPasswordHash(hashedPassword);
+		return userDao.save(user);
+	}
+
 	/**
 	 * Authenticates a user attempting to log in.
 	 * @param username	The username trying to log in.
@@ -78,7 +104,7 @@ public class UserService {
 		userDao.resetFailedAttempts(user.getUserId());
 		return Optional.of(user);
 	}
-	
+
 	/**
 	 * Allows a manager to deactivate a user.
 	 * @param deactivateById	The user to deactivate.
@@ -102,7 +128,7 @@ public class UserService {
 		}
 		userDao.deactivate(deactivateById);
 	}
-	
+
 	/**
 	 * Finds all users in the application.
 	 * @return	All users.
@@ -111,5 +137,16 @@ public class UserService {
 	public List<User> findAllUsers() throws SQLException {
 		return userDao.findAll();		
 	}
-	
+
+	/**
+	 * Validates a password to ensure it meets the minimum requirements.
+	 * @param password	The password to validate.
+	 * @throws IllegalArgumentException If the password is null or less than 8 characters.
+	 */
+	private void validatePassword(String password) {
+		if (password == null || password.length() < 8) {
+			throw new IllegalArgumentException("Password must be at least 8 characters");
+		}
+	}
+
 }

@@ -59,6 +59,10 @@
             <!-- Spacer pushes logout to bottom -->
             <Region VBox.vgrow="ALWAYS"/>
             
+            <Button fx:id="changePasswordButton" text="Change Password" onAction="#handleChangePassword"
+					maxWidth="Infinity" alignment="CENTER_LEFT"
+					styleClass="nav-button"/>
+					
             <Button fx:id="logoutButton" text="Log Out" onAction="#handleLogout"
                     maxWidth="Infinity" alignment="CENTER_LEFT"
                     styleClass="logout-button"/>
