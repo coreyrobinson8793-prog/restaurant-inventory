@@ -73,6 +73,37 @@ public class UserService {
 		user.setPasswordHash(hashedPassword);
 		return userDao.save(user);
 	}
+	
+	/**
+	 * Resets a user's password by an admin or manager.
+	 * @param managerId	The user resetting the password (must be a manager).
+	 * @param targetUserId	The user whose password is being reset.
+	 * @param newPassword	The new password for the target user.
+	 * @return	The updated user.
+	 * @throws SQLException	If the user cannot be updated in the database.
+	 * @throws IllegalArgumentException If the manager is not found or a user that isn't a manager tries to reset a password, manager tries to reset their own password, the target user is not found, or the new password is too short.
+	 */
+	public User resetPassword(int managerId, int targetUserId, String newPassword) throws SQLException {
+		
+		Optional<User> optManager = userDao.findByUserId(managerId);
+		if (!optManager.isPresent() || !optManager.get().isActive() || !"Manager".equals(optManager.get().getPosition())) {
+			throw new IllegalArgumentException("Only active managers can reset passwords");
+		}
+		if (managerId == targetUserId) {
+			throw new IllegalArgumentException("Managers cannot reset their own password");
+		}
+		Optional<User> optTargetUser = userDao.findByUserId(targetUserId);
+		if (!optTargetUser.isPresent()) {
+			throw new IllegalArgumentException("Target user not found");
+		}
+		validatePassword(newPassword);
+		String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		User targetUser = optTargetUser.get();
+		targetUser.setPasswordHash(hashedPassword);
+		targetUser.setFailedLoginAttempts(0); // Reset failed login attempts on password reset
+		targetUser.setLockedUntil(null); // Unlock the user if they were locked out
+		return userDao.save(targetUser);
+	}
 
 	/**
 	 * Authenticates a user attempting to log in.

@@ -32,7 +32,7 @@
 				fx:id="activeColumn" />
 			<TableColumn text="Created" prefWidth="160"
 				fx:id="createdAtColumn" />
-			<TableColumn text="" prefWidth="120"
+			<TableColumn text="" prefWidth="180"
 				fx:id="actionsColumn" />
 		</columns>
 	</TableView>

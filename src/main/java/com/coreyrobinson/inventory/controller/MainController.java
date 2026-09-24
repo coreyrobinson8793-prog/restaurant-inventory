@@ -78,7 +78,6 @@ public class MainController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 	}
 
 	@FXML
