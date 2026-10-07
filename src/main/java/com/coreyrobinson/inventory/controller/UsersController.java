@@ -147,7 +147,7 @@ public class UsersController {
 			return;
 		}
 		try {
-			userService.deactivateUser(user.getUserId(), loggedInUserId);
+			userService.deactivateUser(loggedInUserId, user.getUserId());
 			showSuccess("User '" + user.getUsername() + "' deactivated.");
 			refreshUsers();
 		} catch (IllegalArgumentException e) {

@@ -28,6 +28,7 @@ public class MainController {
 	@FXML private StackPane contentArea;
 	@FXML private Button usersButton;
 	@FXML private Button priceImportsButton;
+	@FXML private Button unitsButton;
 
 	@FXML 
 	private void initialize() {
@@ -39,6 +40,8 @@ public class MainController {
 				usersButton.setManaged(false);
 				priceImportsButton.setVisible(false);
 				priceImportsButton.setManaged(false);
+				unitsButton.setVisible(false);
+				unitsButton.setManaged(false);
 			}
 			loadView("/fxml/InventoryView.fxml");
 		}
@@ -116,6 +119,11 @@ public class MainController {
 	@FXML
 	private void handleNavImports() {
 		loadView("/fxml/PriceImportView.fxml");
+	}
+	
+	@FXML
+	private void handleNavUnits() {
+		loadView("/fxml/UnitsView.fxml");
 	}
 
 }

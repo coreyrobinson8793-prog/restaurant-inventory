@@ -55,6 +55,10 @@
             <Button fx:id="priceImportsButton" text="Import CSV" onAction="#handleNavImports"
             		maxWidth="Infinity" alignment="CENTER_LEFT"
             		styleClass="nav-button"/>
+            		
+            <Button fx:id="unitsButton" text="Units" onAction="#handleNavUnits"
+					maxWidth="Infinity" alignment="CENTER_LEFT"
+					styleClass="nav-button"/>
             
             <!-- Spacer pushes logout to bottom -->
             <Region VBox.vgrow="ALWAYS"/>

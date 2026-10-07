@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+	fx:controller="com.coreyrobinson.inventory.controller.UnitsController"
+	spacing="20" style="-fx-background-color: #f8f9fa">
+	<padding>
+		<Insets top="40" right="20" left="20" bottom="15" />
+	</padding>
+	<Label text="Units"
+		styleClass="screen-header" />
+	<Label text="Add New Unit"
+		styleClass="section-label" />
+	<HBox spacing="10" alignment="CENTER_LEFT">
+		<TextField fx:id="unitField" promptText="Unit" />
+		<Button text="Add Unit" onAction="#handleAddUnit" />
+	</HBox>
+	<Label fx:id="messageLabel" text="" style="-fx-font-size: 12px;" />
+	<TableView fx:id="unitsTable" editable="true" VBox.vgrow="ALWAYS">
+		<columns>
+			<TableColumn text="Unit" prefWidth="150"
+				fx:id="unitNameColumn" />
+		</columns>
+	</TableView>
+</VBox>
