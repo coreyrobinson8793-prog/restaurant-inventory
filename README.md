@@ -26,6 +26,7 @@ _The Import CSV screen. Imports prices, saves one template per supplier, and sho
 
 - First launch setup screen that creates the initial Manager account
 - Multi-user login with BCrypt password hashing
+- Users can change their own password. Managers can reset another user's password, which clears any active lockout.
 - Role-based access (Manager / Staff) — Staff cannot reach the Users or Price Import screens
 - Account lockout after 5 failed attempts (10 minute cooldown)
 - Session management with logout
@@ -57,7 +58,7 @@ _The Import CSV screen. Imports prices, saves one template per supplier, and sho
 - **Low Stock** — active items below par, with the shortage quantity
 - **Open Purchase Orders** — everything currently on order
 - **Spend by Supplier** — received-order counts and totals, aggregated per supplier
-- **Price Comparison** — every item/supplier price, grouped by item, with preferred status
+- **Price Comparison** — every active item/supplier price, grouped by item, with preferred status
 
 ### CSV Price Import
 
@@ -66,6 +67,11 @@ _The Import CSV screen. Imports prices, saves one template per supplier, and sho
 - Matches rows by supplier SKU and bulk-updates prices
 - Per-row error handling — a malformed price or unmatched SKU is skipped, not fatal
 - Every run is logged with row counts (processed / updated / skipped) and viewable as import history
+
+### Units of Measure
+
+- Add new units and rename existing ones through an editable table.
+- Names are validated for duplicates, with renaming a unit to its own current name allowed.
 
 ## Business Rules
 
@@ -109,7 +115,7 @@ The separation means business rules are testable without a UI and enforced no ma
       controller/  - JavaFX controllers
       dao/         - Data Access Objects (13)
       model/       - Domain entities (13)
-      service/     - Business logic layer (5)
+      service/     - Business logic layer (6)
       session/     - Logged-in user session
       util/        - DB connection, money formatting, dialogs
 
@@ -177,7 +183,7 @@ The installed application reads `database.properties` from the directory contain
 
 - Search and filter on the inventory and purchase order tables
 - Editing an existing item/supplier link (currently create and unlink only)
-- Admin screen for managing units of measure and categories
+- Admin screen for managing categories
 - Stock transaction logging, so receiving a purchase order increments on-hand quantities
 - Audit log and price history tables (schema exists; DAOs not yet built)
 - Filter the purchase order item dropdown to items the selected supplier carries
