@@ -96,6 +96,7 @@ public class PurchaseOrdersController {
 			for (Item item : items) {
 				itemNameMap.put(item.getItemId(), item.getItemName());
 			}
+			List<Item> activeItems = itemService.findActiveItems();
 			supplierChoiceBox.setConverter(new StringConverter<Supplier>() {
 				@Override
 				public String toString(Supplier supplier) {
@@ -117,7 +118,7 @@ public class PurchaseOrdersController {
 					return null;
 				}
 			});
-			itemChoiceBox.getItems().setAll(items);
+			itemChoiceBox.getItems().setAll(activeItems);
 		} catch (SQLException e) {
 			showError("Error loading suppliers: " + e.getMessage());
 		}

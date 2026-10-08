@@ -61,7 +61,25 @@ public class ItemDAO {
 	 * @throws SQLException	Error from the database.
 	 */
 	public List<Item> findAll() throws SQLException {
-		String sql = "SELECT * FROM items";
+		String sql = "SELECT * FROM items ORDER BY itemName";
+		List<Item> items = new ArrayList<>();
+		try (Connection conn = DatabaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
+			while (rs.next()) {
+				items.add(mapResultSetToItem(rs));
+			}
+		}
+		return items;
+	}
+	
+	/**
+	 * Creates a list of all active items.
+	 * @return	The list of active items.
+	 * @throws SQLException	Error from the database.
+	 */
+	public List<Item> findAllActive() throws SQLException {
+		String sql = "SELECT * FROM items WHERE is_active = TRUE ORDER BY itemName";
 		List<Item> items = new ArrayList<>();
 		try (Connection conn = DatabaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql);

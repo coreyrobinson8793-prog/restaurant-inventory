@@ -55,6 +55,15 @@ public class ItemService {
 	}
 	
 	/**
+	 * Finds all active items in the application.
+	 * @return	All active items.
+	 * @throws SQLException	Error from the database.
+	 */
+	public List<Item> findActiveItems() throws SQLException {
+	    return itemDao.findAllActive();
+	}
+	
+	/**
 	 * Finds an item by its I.D.
 	 * @param id	The item's I.D.
 	 * @return	The found item.

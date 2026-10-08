@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.coreyrobinson.inventory.dao.UnitDAO;
 import com.coreyrobinson.inventory.model.Item;
 import com.coreyrobinson.inventory.model.ItemSupplier;
 import com.coreyrobinson.inventory.model.Supplier;
 import com.coreyrobinson.inventory.model.Unit;
 import com.coreyrobinson.inventory.service.ItemService;
 import com.coreyrobinson.inventory.service.SupplierService;
+import com.coreyrobinson.inventory.service.UnitService;
 import com.coreyrobinson.inventory.util.ConfirmDialog;
 import com.coreyrobinson.inventory.util.MoneyFormatter;
 
@@ -75,7 +75,7 @@ public class SuppliersController {
 	@FXML private ChoiceBox<Unit> linkPackUnitChoiceBox;
 	private SupplierService supplierService = new SupplierService();
 	private ItemService itemService = new ItemService();
-	private UnitDAO unitDao = new UnitDAO();
+	private UnitService unitService = new UnitService();
 	private ObservableList<ItemSupplier> supplierItemsList = FXCollections.observableArrayList();
 	private ObservableList<Supplier> suppliersList = FXCollections.observableArrayList();
 	private Map<Integer, String> itemNameMap;
@@ -90,6 +90,7 @@ public class SuppliersController {
 			for (Item item : items) {
 				itemNameMap.put(item.getItemId(), item.getItemName());
 			}
+			List<Item> activeItems = itemService.findActiveItems();
 			linkItemChoiceBox.setConverter(new StringConverter<Item>() {
 				@Override
 				public String toString(Item item) {
@@ -100,8 +101,8 @@ public class SuppliersController {
 					return null;
 				}
 			});
-			linkItemChoiceBox.getItems().setAll(items);
-			List<Unit> packUnits = unitDao.findAll();
+			linkItemChoiceBox.getItems().setAll(activeItems);
+			List<Unit> packUnits = unitService.findAllUnits();
 			linkPackUnitChoiceBox.setConverter(new StringConverter<Unit>() {
 				@Override
 				public String toString(Unit unit) {
