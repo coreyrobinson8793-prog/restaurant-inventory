@@ -109,7 +109,7 @@ The separation means business rules are testable without a UI and enforced no ma
 ## Project Structure
 
     database.properties    - DB credentials (project root, gitignored)
-    
+
     src/main/java/com/coreyrobinson/inventory/
       app/         - JavaFX entry point, packaging launcher, and manual test harnesses
       controller/  - JavaFX controllers
@@ -128,6 +128,10 @@ The separation means business rules are testable without a UI and enforced no ma
       schema.sql            - Database and table creation
       migration_001..004    - Incremental schema changes
       demo_data.sql         - Optional sample data
+
+    docs/
+      icon.ico      - Application icon
+      screenshots/  - Screenshots used in this README
 
 ## Getting Started
 
@@ -150,7 +154,7 @@ The separation means business rules are testable without a UI and enforced no ma
    - Recommended to create a dedicated MySQL user with `SELECT/INSERT/UPDATE/DELETE` permissions for this database only, rather than using the root user.
    - If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
 4. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
-5. Start the application with `mvn javafx:run`. On first launch, the application detects that no Manager account exists and prompts you to create one. 
+5. Start the application with `mvn javafx:run`. On first launch, the application detects that no Manager account exists and prompts you to create one.
 
 ### Trying the CSV import
 
@@ -166,14 +170,15 @@ produces a self-contained jar in `target/`. From the project root:
 
     jpackage --type exe ^
       --name "Tailgate Tavern Inventory" ^
-      --app-version 1.0 ^
+      --app-version 1.1 ^
       --vendor "Corey Robinson" ^
       --input target ^
       --main-jar restaurant-inventory-0.0.1-SNAPSHOT.jar ^
       --main-class com.coreyrobinson.inventory.app.Launcher ^
       --win-menu ^
       --win-shortcut ^
-      --dest installer
+      --dest installer ^
+      --icon docs\icon.ico
 
 Requires JDK 21 and [WiX Toolset v3](https://github.com/wixtoolset/wix3/releases).
 
@@ -188,6 +193,10 @@ The installed application reads `database.properties` from the directory contain
 - Audit log and price history tables (schema exists; DAOs not yet built)
 - Filter the purchase order item dropdown to items the selected supplier carries
 - Surface low-stock and price-comparison data directly on the Purchase Orders screen
+
+## Attributions
+
+- <a href="https://www.flaticon.com/free-icons/inventory" title="inventory icons">Inventory icons created by Magnific - Flaticon</a>
 
 ## Author
 
