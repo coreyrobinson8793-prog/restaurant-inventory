@@ -135,26 +135,39 @@ The separation means business rules are testable without a UI and enforced no ma
 
 ## Getting Started
 
-### Prerequisites
+There are two ways to run it — download the installer, or build from
+source. Both need MySQL set up first.
 
-- JDK 21
-- MySQL 8
-- Maven 3.6+
+### 1. Set up the database
 
-### Setup
+Requires MySQL 8.
 
-1. Clone the repository.
-2. Run the SQL scripts in `database/` **in order**:
-   - `schema.sql` — creates the database and base tables
-   - `migration_001_add_lockout_fields.sql`
-   - `migration_002_supplier_junction_categories.sql`
-   - `migration_003_update_po_status.sql`
-   - `migration_004_seed_categories.sql`
-3. Copy `src/main/resources/database.properties.example` to `database.properties` in the project root and fill in your MySQL credentials. The application reads it from the working directory at startup.
-   - Recommended to create a dedicated MySQL user with `SELECT/INSERT/UPDATE/DELETE` permissions for this database only, rather than using the root user.
-   - If connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the URL.
-4. _(Optional)_ Load `database/demo_data.sql` for sample suppliers, items, supplier links, purchase orders, and a configured import template.
-5. Start the application with `mvn javafx:run`. On first launch, the application detects that no Manager account exists and prompts you to create one.
+- If you’re installing rather than building, download the repo as a ZIP (green Code button → Download ZIP) to get the SQL scripts and the `database.properties.example` template.
+- Run the SQL scripts in `database/` in order: `schema.sql`, `migration_001…004`
+- Create a dedicated MySQL user with SELECT/INSERT/UPDATE/DELETE on this
+  database only, rather than using root
+- (Optional) load `demo_data.sql` for sample data
+- When you fill in `database.properties` in the next step: if you’re connecting to MySQL 8 over a non-SSL local connection, append `&allowPublicKeyRetrieval=true` to the JDBC URL.
+
+### 2a. Running the installer
+
+Download from the [Releases page](https://github.com/coreyrobinson8793-prog/restaurant-inventory/releases/latest).
+
+- Install, then copy `database.properties` into the install directory,
+  alongside the .exe
+  - The default install directory is under Program Files, so you’ll need to copy the file in as an administrator.
+- Launch. On first run the app detects no Manager account and prompts
+  you to create one.
+
+### 2b. Building from source
+
+Requires JDK 21 and Maven 3.6+.
+
+- Clone the repository
+- Copy `src/main/resources/database.properties.example` to
+  `database.properties` in the project root — the app reads it from the
+  working directory at startup
+- `mvn javafx:run`
 
 ### Trying the CSV import
 
@@ -181,8 +194,6 @@ produces a self-contained jar in `target/`. From the project root:
       --icon docs\icon.ico
 
 Requires JDK 21 and [WiX Toolset v3](https://github.com/wixtoolset/wix3/releases).
-
-The installed application reads `database.properties` from the directory containing the executable, so no credentials are compiled into the distributed build. You must copy `database.properties` into the executable's directory manually. MySQL must still be installed and reachable on the target machine.
 
 ## Planned Enhancements
 
