@@ -2,6 +2,6 @@
 # database.properties is gitignored to keep credentials out of version control.
 
 db.url=jdbc:mysql://localhost:3306/restaurant_inventory?useSSL=false&serverTimezone=UTC
-db.user=root
+db.user=inventory_app
 db.password=YOUR_PASSWORD_HERE
 db.driver=com.mysql.cj.jdbc.Driver
