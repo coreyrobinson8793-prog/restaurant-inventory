@@ -2,6 +2,8 @@
 
 A JavaFX desktop application for managing restaurant inventory, suppliers, purchase orders, and supplier price imports. Deployed and in use with real data to replace spreadsheet inventory management at the restaurant where I work.
 
+**[Setup walkthrough (4 min)](https://youtu.be/Tm2mKb5HIsM)** — installing from the release onto a clean machine.
+
 ## Screenshots
 
 ![Purchase Orders](docs/screenshots/PO_master_detail.PNG)
