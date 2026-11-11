@@ -4,6 +4,8 @@ A JavaFX desktop application for managing restaurant inventory, suppliers, purch
 
 **[Setup walkthrough (4 min)](https://youtu.be/Tm2mKb5HIsM)** — installing from the release onto a clean machine.
 
+**[Demo video (12 min)](https://youtu.be/LgHP1hiyqbw)** — demo of the applications features.
+
 ## Screenshots
 
 ![Purchase Orders](docs/screenshots/PO_master_detail.PNG)
